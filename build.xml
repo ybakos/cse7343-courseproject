@@ -3,6 +3,8 @@
     <property name="processing.dir"
               value="/Applications/Processing.app/Contents/Java/core/library" />
     <property name="src.dir"     value="src" />
+    <property name="test.dir"    value="test" />
+    <property name="lib.dir"     value="lib" />
     <property name="build.dir"   value="build" />
     <property name="classes.dir" value="${build.dir}/classes" />
     <property name="jar.dir"     value="dist" />
@@ -12,8 +14,16 @@
         <include name="*.jar" />
     </fileset>
 
+    <fileset id="test.library" dir="${lib.dir}">
+        <include name="*.jar" />
+    </fileset>
+
     <path id="build.classpath">
         <fileset refid="processing.library" />
+    </path>
+
+    <path id="test.classpath">
+        <fileset refid="test.library"/>
     </path>
 
     <pathconvert property="manifest.classpath" pathsep=" ">
@@ -38,6 +48,11 @@
                includeantruntime="false" />
     </target>
 
+    <target name="compile_test" depends="compile">
+        <javac srcdir="${test.dir}" destdir="${classes.dir}" classpathref="test.classpath"
+            includeantruntime="false" />
+    </target>
+
     <target name="jar">
         <mkdir dir="${jar.dir}" />
         <jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${classes.dir}">
@@ -51,5 +66,19 @@
     <target name="run" depends="build">
         <java jar="${jar.dir}/${ant.project.name}.jar" fork="true" />
     </target>
+
+    <target name="test" depends="clean, compile_test">
+        <junit printsummary="on" haltonfailure="yes">
+            <classpath>
+                <path refid="test.classpath" />
+                <path refid="build.classpath" />
+                <pathelement location="${classes.dir}" />
+            </classpath>
+            <formatter type="brief" usefile="false" />
+            <batchtest>
+                <fileset dir="${test.dir}" />
+            </batchtest>
+        </junit>
+  </target>
 
 </project>
