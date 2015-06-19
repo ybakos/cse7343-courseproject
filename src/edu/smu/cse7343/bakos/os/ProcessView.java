@@ -3,8 +3,8 @@
     @author Yong Joseph Bakos
     
     A visual representation of a Process. A ProcessView will move every time
-    it is `updated` by its corresponding Process. It also increases its size
-    each time it is `updated` to visually indicate that it has been given
+    it is `update`d by its corresponding Process. It also increases its size
+    each time it is `update`d to visually indicate that it has been given
     more execution time by the scheduler, the idea being that higher priority
     processes are seen as larger ProcessViews.
 
@@ -15,26 +15,26 @@
     a behavior that follows the mouse, but not in a straight line.
 
     Some motion ideas influenced by Nature of Code by Dan Shiffman. (http://natureofcode.com/)
-
 */
+
 package edu.smu.cse7343.bakos.os;
 
 import processing.core.*;
 
 public class ProcessView {
 
-    final float MAX_VELOCITY = 2;
-    final float ACCELERATION_SCALE = 0.4f;
-    final float NOISE_DELTA = 0.01f;
-    final float GROWTH_DELTA = 0.01f;
-    final float DEFAULT_X_OFFSET = 0.0f;
-    final float PROBABILITY_OF_FOLLOWING_MOUSE = 0.5f;
+    private final float MAX_VELOCITY = 2;
+    private final float ACCELERATION_SCALE = 0.4f;
+    private final float NOISE_DELTA = 0.01f;
+    private final float GROWTH_DELTA = 0.01f;
+    private final float DEFAULT_X_OFFSET = 0.0f;
+    private final float PROBABILITY_OF_FOLLOWING_MOUSE = 0.5f;
     
-    PApplet p;
-    PVector location;
-    PVector velocity;
-    float xoff = DEFAULT_X_OFFSET;
-    float size = 10;
+    private PApplet p;
+    private PVector location;
+    private PVector velocity;
+    private float xoff = DEFAULT_X_OFFSET;
+    private float size = 10;
 
     public ProcessView(PApplet p) {
         this(p, p.width / 2, p.height / 2);
