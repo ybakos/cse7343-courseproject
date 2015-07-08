@@ -10,20 +10,26 @@
 package edu.smu.cse7343.bakos.os;
 
 import processing.core.*;
+import java.util.*;
 
 public class Simulator extends PApplet {
+
+    private ArrayList<Drawable> drawables = new ArrayList<Drawable>();
     
-    ProcessView pv;
+    CPU cpu;
 
     public void setup() {
         size(displayWidth, displayHeight);
-        pv = new ProcessView(this, width / 2, height / 2);
+        cpu = new CPU(this);
+        drawables.add(cpu);
     }
 
     public void draw() {
         background(0);
-        pv.update();
-        pv.draw();
+        for (Drawable d : drawables) {
+            d.update();
+            d.draw();
+        }
     }
 
 }
