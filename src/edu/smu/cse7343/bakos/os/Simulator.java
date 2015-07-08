@@ -14,22 +14,17 @@ import java.util.*;
 
 public class Simulator extends PApplet {
 
-    private ArrayList<Drawable> drawables = new ArrayList<Drawable>();
-    
-    CPU cpu;
+    OperatingSystem os;
 
     public void setup() {
         size(displayWidth, displayHeight);
-        cpu = new CPU(this);
-        drawables.add(cpu);
+        os = new OperatingSystem(this);
     }
 
     public void draw() {
         background(0);
-        for (Drawable d : drawables) {
-            d.update();
-            d.draw();
-        }
+        os.update();
+        os.draw();
     }
 
 }
