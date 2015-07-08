@@ -28,7 +28,7 @@ public class ProcessView {
     private final float NOISE_DELTA = 0.01f;
     private final float GROWTH_DELTA = 0.01f;
     private final float DEFAULT_X_OFFSET = 0.0f;
-    private final float PROBABILITY_OF_FOLLOWING_MOUSE = 0.5f;
+    private final float PROBABILITY_OF_FOLLOWING_MOUSE = 0.8f;
     
     private PApplet p;
     private PVector location;
@@ -36,14 +36,19 @@ public class ProcessView {
     private float xoff = DEFAULT_X_OFFSET;
     private float size = 10;
 
+    private int color;
+
     public ProcessView(PApplet p) {
-        this(p, p.width / 2, p.height / 2);
+        this(p, p.width / 2 + p.random(-50, 50), p.height / 2 + p.random(-50, 50));
     }
 
     public ProcessView(PApplet p, float x, float y) {
         this.p = p;
         location = new PVector(x, y);
         velocity = new PVector(0, 0);
+        color = p.color(p.random(150, 255), p.random(150, 255), p.random(150, 255), 200);
+        size = p.random(10, 50);
+        xoff = p.random(-1, 1);
     }
 
     public void update() {
@@ -61,10 +66,13 @@ public class ProcessView {
     }
 
     public void draw() {
+        p.pushStyle();
         p.pushMatrix();
         p.translate(location.x, location.y);
+        p.fill(color);
         p.ellipse(0, 0, size, size);
         p.popMatrix();
+        p.popStyle();
     }
 
     private PVector acceleration() {

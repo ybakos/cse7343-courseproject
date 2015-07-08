@@ -12,8 +12,24 @@ package edu.smu.cse7343.bakos.os;
 
 import java.util.*;
 
-public abstract class ProcessQueue {
+public class ProcessQueue {
     
-    private LinkedList<ProcessControlBlock> queue;
+    private LinkedList<ProcessControlBlock> queue = new LinkedList<ProcessControlBlock>();
+
+    public ProcessQueue() {
+    }
+
+    public boolean isEmpty() {
+        return queue.isEmpty();
+    }
+
+    public void add(ProcessControlBlock pcb) {
+        pcb.state = ProcessState.READY;
+        queue.add(pcb);
+    }
+
+    public ProcessControlBlock remove() {
+        return queue.remove();
+    }
 
 }
