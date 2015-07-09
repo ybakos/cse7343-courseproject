@@ -55,7 +55,7 @@ public class Simulator extends PApplet {
         if (!readyQueue.isEmpty() && roundRobinCycleLimitReached()) {
             switchContext();
         } else if (currentProcess != null) {
-            updateProcessView(new Integer(currentProcess.pid));
+            execute(currentProcess);
         }
     }
 
@@ -70,17 +70,16 @@ public class Simulator extends PApplet {
 
     private void switchContext() {
         if (currentProcess != null) {
-            println("Storing currentProcess at end of ready queue.");
             readyQueue.add(currentProcess);
             currentProcess.state = ProcessState.READY;
         }
-        println("Queue head is popped to current.");
         currentProcess = readyQueue.remove();
         currentProcess.state = ProcessState.RUNNING;
     }
 
-    private void updateProcessView(Integer key) {
-        ProcessView view = processViews.get(key);
+    private void execute(ProcessControlBlock pcb) {
+        pcb.programCounter++;
+        ProcessView view = processViews.get(new Integer(pcb.pid));
         if (view != null) view.update();
     }
 
