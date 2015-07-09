@@ -107,6 +107,8 @@ public class Simulator extends PApplet {
         waitQueue.add(pcb);
         currentProcess = null;
         switchContext();
+        ProcessView view = processViews.get(new Integer(pcb.pid));
+        if (view != null) view.dim();
     }
 
 }

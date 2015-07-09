@@ -83,4 +83,12 @@ public class ProcessView {
         } else return PVector.fromAngle(p.noise(xoff) * p.TWO_PI);
     }
 
+    public void dim() {
+        color = p.color(p.red(color), p.green(color), p.blue(color), 100);
+    }
+
+    public void light() {
+        color = p.color(p.red(color), p.green(color), p.blue(color), 200);   
+    }
+
 }
