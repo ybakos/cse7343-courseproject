@@ -4,7 +4,10 @@
 
     This class represents an operating system PCB.
 
-    TODO
+    For now, the important attributes are pid and state.
+
+    The programCounter and registers are declared here to reflect parts of a real
+    PCB, but are not yet used (TODO: Phase 2).
 */
 
 package edu.smu.cse7343.bakos.os;

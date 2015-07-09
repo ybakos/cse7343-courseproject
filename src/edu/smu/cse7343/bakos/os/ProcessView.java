@@ -3,12 +3,12 @@
     @author Yong Joseph Bakos
     
     A visual representation of a Process. A ProcessView will move every time
-    it is `update`d by its corresponding Process. It also increases its size
-    each time it is `update`d to visually indicate that it has been given
+    it its corresponding process executes its next 'instruction'. TODO: It also increases
+    its size each time it is `update`d to visually indicate that it has been given
     more execution time by the scheduler, the idea being that higher priority
     processes are seen as larger ProcessViews.
 
-    When the ProcessView touches the mouse, its Process should be notified
+    TODO: When the ProcessView touches the mouse, its Process should be notified
     that it should terminate.
 
     Uses Perlin Noise with a 50% chance of following the mouse, to simulate
@@ -75,14 +75,6 @@ public class ProcessView {
         p.popStyle();
     }
 
-    private PVector acceleration() {
-        if (p.random(0, 1) < PROBABILITY_OF_FOLLOWING_MOUSE) {
-            PVector mouseVector = PVector.sub(new PVector(p.mouseX, p.mouseY), location);
-            mouseVector.normalize(); // Fuck you, Processing!
-            return mouseVector;      // This whole thing could be a one-liner.
-        } else return PVector.fromAngle(p.noise(xoff) * p.TWO_PI);
-    }
-
     public void dim() {
         color = p.color(p.red(color), p.green(color), p.blue(color), 100);
     }
@@ -91,8 +83,16 @@ public class ProcessView {
         color = p.color(p.red(color), p.green(color), p.blue(color), 220);   
     }
 
-    public boolean clicked(int x, int y) {
+    public boolean isClicked(int x, int y) {
         return p.dist(location.x, location.y, x, y) < (size / 2);
+    }
+
+    private PVector acceleration() {
+        if (p.random(0, 1) < PROBABILITY_OF_FOLLOWING_MOUSE) {
+            PVector mouseVector = PVector.sub(new PVector(p.mouseX, p.mouseY), location);
+            mouseVector.normalize(); // Fuck you, Processing!
+            return mouseVector;      // This whole thing could be a one-liner.
+        } else return PVector.fromAngle(p.noise(xoff) * p.TWO_PI);
     }
 
 }

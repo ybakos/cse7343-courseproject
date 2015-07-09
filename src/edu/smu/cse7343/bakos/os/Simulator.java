@@ -5,6 +5,15 @@
     This class represents an abstract main entry point of the simulation, and
     prepares all of the necessary structures and instances. Processing's `PApplet.main`
     function will call `setup`, and then call `draw` over and over again.
+
+    For the sake of this simulation, you can consider the repetitive calls to draw a
+    complete fetch-execute cycle (or tick-tock) of the CPU.
+
+    This simulation uses a very naive, implicit round-robin scheduler that lets each
+    active process execute for 30 cycles before being placed at the back of the ready
+    queue.
+
+    The screen itself displays instructions for the user (see README.md) for details.
 */
 
 package edu.smu.cse7343.bakos.os;
@@ -47,7 +56,7 @@ public class Simulator extends PApplet {
 
     public void mousePressed() {
         for (Map.Entry<Integer, ProcessView> entry : processViews.entrySet()) {
-            if (entry.getValue().clicked(mouseX, mouseY)) {
+            if (entry.getValue().isClicked(mouseX, mouseY)) {
                 interruptAndUnblock(entry.getKey().intValue());
             }
         }
