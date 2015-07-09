@@ -16,8 +16,8 @@ public class Simulator extends PApplet {
 
     private final static int ROUND_ROBIN_CYCLE_LIMIT = 30;
 
-    private ProcessQueue readyQueue = new ProcessQueue();
-    private ProcessQueue waitQueue = new ProcessQueue();
+    private ProcessQueue readyQueue;
+    private ProcessQueue waitQueue;
     private ProcessControlBlock currentProcess;
     private int nextPid = 0;
 
@@ -25,6 +25,8 @@ public class Simulator extends PApplet {
 
     public void setup() {
         size(displayWidth, displayHeight);
+        readyQueue = new ProcessQueue(ProcessState.READY, "Ready Queue", 200, height - 300);
+        waitQueue = new ProcessQueue(ProcessState.WAITING, "Wait Queue", 200, height - 100);
     }
 
     public void draw() {
@@ -40,14 +42,17 @@ public class Simulator extends PApplet {
         textSize(72);
         textAlign(CENTER);
         text("Press space to create a process.", width / 2, 100);
+        text("Press B to cause the executing process to self-block.", width / 2, 180);
         textSize(32);
         textAlign(CENTER);
-        text("A blocked process will stop moving and wait until you click on it.", width / 2, 150);
+        text("Click on a blocked process to interrupt and place it back in the ready queue.", width / 2, 230);
     }
 
     public void keyPressed() {
         if (key == ' ') {
             createNewProcess(nextPid++);
+        } else if (key == 'b') {
+            blockProcess(currentProcess);
         }
     }
 
@@ -73,8 +78,10 @@ public class Simulator extends PApplet {
             readyQueue.add(currentProcess);
             currentProcess.state = ProcessState.READY;
         }
-        currentProcess = readyQueue.remove();
-        currentProcess.state = ProcessState.RUNNING;
+        if (!readyQueue.isEmpty()) {
+            currentProcess = readyQueue.remove();
+            currentProcess.state = ProcessState.RUNNING;
+        }
     }
 
     private void execute(ProcessControlBlock pcb) {
@@ -91,6 +98,15 @@ public class Simulator extends PApplet {
 
     private void drawQueues() {
         readyQueue.draw(processViews, this);
+        waitQueue.draw(processViews, this);
+    }
+
+    private void blockProcess(ProcessControlBlock pcb) {
+        if (pcb == null) return;
+        pcb.state = ProcessState.WAITING;
+        waitQueue.add(pcb);
+        currentProcess = null;
+        switchContext();
     }
 
 }
