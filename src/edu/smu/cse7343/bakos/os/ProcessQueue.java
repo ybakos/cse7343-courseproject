@@ -41,6 +41,18 @@ public class ProcessQueue {
         return queue.remove();
     }
 
+    public ProcessControlBlock peek() {
+        return queue.peek();
+    }
+
+    public ProcessControlBlock remove(int index) {
+        return queue.remove(index);
+    }
+
+    public void add(int index, ProcessControlBlock pcb) {
+        queue.add(index, pcb);
+    }
+
     public void draw(HashMap<Integer, ProcessView> processViews, PApplet p) {
         p.pushStyle();
         p.pushMatrix();
@@ -53,12 +65,10 @@ public class ProcessQueue {
         p.line(0, 0, 500, 0);
         float sizeOffset = 0.0f;
         for (ProcessControlBlock pcb : queue) {
-            //if (pcb.state == managedState) {
-                ProcessView view = processViews.get(new Integer(pcb.pid));
-                p.fill(view.color);
-                p.ellipse(sizeOffset + (view.size / 2.0f), 0, view.size, view.size);
-                sizeOffset += (view.size / 2.0f);
-            //}
+            ProcessView view = processViews.get(new Integer(pcb.pid));
+            p.fill(view.color);
+            p.ellipse(sizeOffset + (view.size / 2.0f), 0, view.size, view.size);
+            sizeOffset += (view.size / 2.0f);
         }
         p.popMatrix();
         p.popStyle();

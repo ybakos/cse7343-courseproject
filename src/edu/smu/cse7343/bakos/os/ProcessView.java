@@ -46,7 +46,7 @@ public class ProcessView {
         this.p = p;
         location = new PVector(x, y);
         velocity = new PVector(0, 0);
-        color = p.color(p.random(150, 255), p.random(150, 255), p.random(150, 255), 200);
+        color = p.color(p.random(150, 255), p.random(150, 255), p.random(150, 255), 220);
         size = p.random(10, 50);
         xoff = p.random(-1, 1);
     }
@@ -88,7 +88,11 @@ public class ProcessView {
     }
 
     public void light() {
-        color = p.color(p.red(color), p.green(color), p.blue(color), 200);   
+        color = p.color(p.red(color), p.green(color), p.blue(color), 220);   
+    }
+
+    public boolean clicked(int x, int y) {
+        return p.dist(location.x, location.y, x, y) < (size / 2);
     }
 
 }

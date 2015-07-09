@@ -37,6 +37,22 @@ public class Simulator extends PApplet {
         drawQueues();
     }
 
+    public void keyPressed() {
+        if (key == ' ') {
+            createNewProcess(nextPid++);
+        } else if (key == 'b') {
+            blockProcess(currentProcess);
+        }
+    }
+
+    public void mousePressed() {
+        for (Map.Entry<Integer, ProcessView> entry : processViews.entrySet()) {
+            if (entry.getValue().clicked(mouseX, mouseY)) {
+                interruptAndUnblock(entry.getKey().intValue());
+            }
+        }
+    }
+
     private void drawTitle() {
         fill(50);
         textSize(72);
@@ -48,13 +64,6 @@ public class Simulator extends PApplet {
         text("Click on a blocked process to interrupt and place it back in the ready queue.", width / 2, 230);
     }
 
-    public void keyPressed() {
-        if (key == ' ') {
-            createNewProcess(nextPid++);
-        } else if (key == 'b') {
-            blockProcess(currentProcess);
-        }
-    }
 
     private void tickTock() {
         if (!readyQueue.isEmpty() && roundRobinCycleLimitReached()) {
@@ -109,6 +118,16 @@ public class Simulator extends PApplet {
         switchContext();
         ProcessView view = processViews.get(new Integer(pcb.pid));
         if (view != null) view.dim();
+    }
+
+    private void interruptAndUnblock(int pid) {
+        ProcessControlBlock waitHead = waitQueue.peek();
+        if (waitHead != null && pid == waitHead.pid) {
+            ProcessControlBlock pcb = waitQueue.remove();
+            pcb.state = ProcessState.READY;
+            readyQueue.add(waitHead);
+            processViews.get(new Integer(pid)).light();
+        }
     }
 
 }
