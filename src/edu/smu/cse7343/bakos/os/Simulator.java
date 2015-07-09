@@ -30,14 +30,9 @@ public class Simulator extends PApplet {
     public void draw() {
         background(0);
         drawTitle();
-        if (!readyQueue.isEmpty() && frameCount % ROUND_ROBIN_CYCLE_LIMIT == 0) {
-            switchContext();
-        } else if (currentProcess != null) {
-            updateProcessView(new Integer(currentProcess.pid));
-        }
-        for (ProcessView v : processViews.values()) {
-            v.draw();
-        }
+        tickTock();
+        drawProcessViews();
+        drawQueues();
     }
 
     private void drawTitle() {
@@ -54,6 +49,18 @@ public class Simulator extends PApplet {
         if (key == ' ') {
             createNewProcess(nextPid++);
         }
+    }
+
+    private void tickTock() {
+        if (!readyQueue.isEmpty() && roundRobinCycleLimitReached()) {
+            switchContext();
+        } else if (currentProcess != null) {
+            updateProcessView(new Integer(currentProcess.pid));
+        }
+    }
+
+    private boolean roundRobinCycleLimitReached() {
+        return frameCount % ROUND_ROBIN_CYCLE_LIMIT == 0;
     }
 
     private void createNewProcess(int pid) {
@@ -75,6 +82,16 @@ public class Simulator extends PApplet {
     private void updateProcessView(Integer key) {
         ProcessView view = processViews.get(key);
         if (view != null) view.update();
+    }
+
+    private void drawProcessViews() {
+        for (ProcessView v : processViews.values()) {
+            v.draw();
+        }
+    }
+
+    private void drawQueues() {
+        readyQueue.draw(processViews, this);
     }
 
 }

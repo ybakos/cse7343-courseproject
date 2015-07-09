@@ -11,6 +11,7 @@
 package edu.smu.cse7343.bakos.os;
 
 import java.util.*;
+import processing.core.*;
 
 public class ProcessQueue {
     
@@ -30,6 +31,27 @@ public class ProcessQueue {
 
     public ProcessControlBlock remove() {
         return queue.remove();
+    }
+
+    public void draw(HashMap<Integer, ProcessView> processViews, PApplet p) {
+        p.pushStyle();
+        p.pushMatrix();
+        p.stroke(150);
+        p.translate(200, p.height - 200);
+        p.textSize(32);
+        p.text("Ready Queue", 250, -100);
+        p.textSize(18);
+        p.text("Head", -50, 5);
+        p.line(0, 0, 500, 0);
+        int sizeOffset = 0;
+        for (ProcessControlBlock pcb : queue) {
+            ProcessView view = processViews.get(new Integer(pcb.pid));
+            p.fill(view.color);
+            p.ellipse(sizeOffset, 0, view.size, view.size);
+            sizeOffset += view.size;
+        }
+        p.popMatrix();
+        p.popStyle();
     }
 
 }

@@ -34,9 +34,9 @@ public class ProcessView {
     private PVector location;
     private PVector velocity;
     private float xoff = DEFAULT_X_OFFSET;
-    private float size = 10;
+    public float size = 10;
 
-    private int color;
+    public int color;
 
     public ProcessView(PApplet p) {
         this(p, p.width / 2 + p.random(-50, 50), p.height / 2 + p.random(-50, 50));
