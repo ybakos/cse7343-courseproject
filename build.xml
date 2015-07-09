@@ -1,7 +1,5 @@
 <project name="os" basedir="." default="run">
 
-    <property name="processing.dir"
-              value="/Applications/Processing.app/Contents/Java/core/library" />
     <property name="src.dir"     value="src" />
     <property name="test.dir"    value="test" />
     <property name="lib.dir"     value="lib" />
@@ -10,7 +8,7 @@
     <property name="jar.dir"     value="dist" />
     <property name="main-class"  value="edu.smu.cse7343.bakos.os.Main" />
 
-    <fileset id="processing.library" dir="${processing.dir}">
+    <fileset id="processing.library" dir="${lib.dir}">
         <include name="*.jar" />
     </fileset>
 
@@ -31,7 +29,7 @@
         <mapper>
             <chainedmapper>
                <flattenmapper />
-               <globmapper from="*.jar" to="${processing.dir}/*.jar"/>
+               <globmapper from="*.jar" to="${lib.dir}/*.jar"/>
             </chainedmapper>
         </mapper>
     </pathconvert>
