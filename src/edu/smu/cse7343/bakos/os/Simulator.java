@@ -26,17 +26,19 @@ public class Simulator extends PApplet {
     private final static int ROUND_ROBIN_CYCLE_LIMIT = 30;
 
     private CPU cpu;
+    private OperatingSystem os;
 
     private ProcessQueue readyQueue;
     private ProcessQueue waitQueue;
     private ProcessControlBlock currentProcess;
-    private int nextPid = 0;
+
     // Visual representations of each running process, each corresponding to a PCB in a queue.
     private HashMap<Integer, ProcessView> processViews = new HashMap<Integer, ProcessView>();
 
     public void setup() {
         size(displayWidth, displayHeight);
         cpu = new CPU(200, height - 500);
+        os = new OperatingSystem();
         readyQueue = new ProcessQueue(ProcessState.READY, "Ready Queue", 100, height - 225);
         waitQueue = new ProcessQueue(ProcessState.WAITING, "Wait Queue", 100, height - 50);
     }
@@ -60,7 +62,7 @@ public class Simulator extends PApplet {
     // resource such as some abstract I/O.
     public void keyPressed() {
         if (key == ' ') {
-            createNewProcess(nextPid++);
+            createNewProcess(os.nextPid++);
         } else if (key == 'b') {
             blockProcess(currentProcess);
         }
