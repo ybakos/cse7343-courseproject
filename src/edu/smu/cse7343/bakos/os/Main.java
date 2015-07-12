@@ -20,7 +20,7 @@ import processing.core.*;
 
 public class Main {
 
-    private final static String[] OPTIONS = new String[] { "--present", "edu.smu.cse7343.bakos.os.Simulator" };
+    private static final String[] OPTIONS = new String[] { "--present", "edu.smu.cse7343.bakos.os.Simulator" };
     
     public static void main(String[] args) {
         PApplet.main(OPTIONS);
