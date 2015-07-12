@@ -24,9 +24,9 @@ public class CPU {
     int y;
     int width;
     int height;
-    int strokeColor = 200;
+    int strokeColor = 150;
     int fillColor = 20;
-    int internalLabelColor = 255;
+    int internalLabelColor = 200;
     int mainLabelColor = 50;
 
     public CPU(int x, int y) {
