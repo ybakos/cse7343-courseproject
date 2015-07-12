@@ -25,6 +25,8 @@ public class Simulator extends PApplet {
 
     private final static int ROUND_ROBIN_CYCLE_LIMIT = 30;
 
+    private CPU cpu;
+
     private ProcessQueue readyQueue;
     private ProcessQueue waitQueue;
     private ProcessControlBlock currentProcess;
@@ -34,8 +36,9 @@ public class Simulator extends PApplet {
 
     public void setup() {
         size(displayWidth, displayHeight);
-        readyQueue = new ProcessQueue(ProcessState.READY, "Ready Queue", 200, height - 300);
-        waitQueue = new ProcessQueue(ProcessState.WAITING, "Wait Queue", 200, height - 100);
+        cpu = new CPU(200, height - 500);
+        readyQueue = new ProcessQueue(ProcessState.READY, "Ready Queue", 100, height - 225);
+        waitQueue = new ProcessQueue(ProcessState.WAITING, "Wait Queue", 100, height - 50);
     }
 
     // Invoked automatically and over and over again by Processing. This provides an implicit
@@ -47,6 +50,8 @@ public class Simulator extends PApplet {
         tickTock();
         drawProcessViews();
         drawQueues();
+        cpu.update();
+        cpu.draw(this);
     }
 
     // This really is a true interrupt handler, and I use it to simulate interrupts. Pressing
