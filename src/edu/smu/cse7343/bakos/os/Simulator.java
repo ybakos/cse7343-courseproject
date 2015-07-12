@@ -40,7 +40,10 @@ public class Simulator extends PApplet {
     // fetch/execute cycle or tick-tock of the CPU.
     // At the highest level of abstraciton, this is all the whole program really does.
     public void draw() {
-        //tickTock();
+        cpu.tickTock();
+        // This simulates the execution of the OS, since this simulator is abstracting
+        // kernel processes. In a nutshell, this represents the passage of time for the OS.
+        os.syscall("wait", frameCount);
         background(0);
         drawTitle();
         cpuView.draw(this, cpu);
@@ -53,9 +56,9 @@ public class Simulator extends PApplet {
     // resource such as some abstract I/O.
     public void keyPressed() {
         if (key == ' ') {
-            os.createNewProcess();
+            os.syscall("exec", 0);
         } else if (key == 'b') {
-            os.blockCurrentProcess();
+            os.syscall("block", 0);
         }
     }
 
@@ -80,78 +83,5 @@ public class Simulator extends PApplet {
         textAlign(CENTER);
         text("Click on a blocked process to interrupt and place it back in the ready queue.", width / 2, 230);
     }
-
-    // // Executes the current process. If it has been given enough CPU time, then conduct a
-    // // context switch by placing the current PCB at the tail of the ready queue, and use the
-    // // restore execution of the process represented by the PCB at the head of the queue.
-    // private void tickTock() {
-    //     cpu.tickTock();
-    //     if (!os.readyQueue.isEmpty() && roundRobinCycleLimitReached()) {
-    //         switchContext();
-    //     } else if (os.currentProcess != null) {
-    //         execute(os.currentProcess);
-    //     }
-    // }
-
-    // // A naive simulation of determining if a process has received enough CPU time.
-    // private boolean roundRobinCycleLimitReached() {
-    //     return frameCount % os.ROUND_ROBIN_CYCLE_LIMIT == 0;
-    // }
-
-    // // Adds a new PCB to the tail of the ready queue, and also creates a ProcessView
-    // // to visually represent the process for that PCB.
-    // private void createNewProcess(int pid) {
-    //     os.readyQueue.add(new ProcessControlBlock(pid));
-    //     processViews.put(new Integer(pid), new ProcessView(this));
-    // }
-
-    // // Place the currently executing process' PCB at the tail of the ready queue,
-    // // and restore the execution of the process represented by the PCB at the head
-    // // of the queue.
-    // private void switchContext() {
-    //     if (os.currentProcess != null) {
-    //         os.readyQueue.add(os.currentProcess);
-    //         os.currentProcess.state = ProcessState.READY;
-    //     }
-    //     if (!os.readyQueue.isEmpty()) {
-    //         os.currentProcess = os.readyQueue.remove();
-    //         os.currentProcess.state = ProcessState.RUNNING;
-    //     }
-    // }
-
-    // // Simulates the execution of a process represented by the particular PCB,
-    // // and updates the corresponding ProcessView that visually represents the
-    // // process associated with that PCB.
-    // private void execute(ProcessControlBlock pcb) {
-    //     pcb.programCounter++;
-    //     ProcessView view = processViews.get(new Integer(pcb.pid));
-    //     if (view != null) view.update();
-    // }
-
-    // // Simulates the self-blocking of a process, as if it is waiting for a resource.
-    // // Once the process is blocked, it is placed on the waiting queue, a context switch
-    // // occurs, and the corresponding view is dimmed to indicate that the process is blocked.
-    // private void blockProcess(ProcessControlBlock pcb) {
-    //     if (pcb == null) return;
-    //     pcb.state = ProcessState.WAITING;
-    //     os.waitQueue.add(pcb);
-    //     os.currentProcess = null;
-    //     switchContext();
-    //     ProcessView view = processViews.get(new Integer(pcb.pid));
-    //     if (view != null) view.dim();
-    // }
-
-    // // Simulates the availability of a resource and an interrupt that allows the process
-    // // corresponding with the PCB at the head of the queue to be placed back in the ready
-    // // queue.
-    // private void interruptAndUnblock(int pid) {
-    //     ProcessControlBlock waitHead = os.waitQueue.peek();
-    //     if (waitHead != null && pid == waitHead.pid) {
-    //         ProcessControlBlock pcb = os.waitQueue.remove();
-    //         pcb.state = ProcessState.READY;
-    //         os.readyQueue.add(waitHead);
-    //         processViews.get(new Integer(pid)).light();
-    //     }
-    // }
 
 }
