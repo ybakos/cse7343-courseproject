@@ -24,6 +24,7 @@ import java.util.*;
 public class Simulator extends PApplet {
 
     private CPU cpu;
+    private CPUView cpuView;
     private OperatingSystem os;
 
     // Visual representations of each running process, each corresponding to a PCB in a queue.
@@ -31,7 +32,8 @@ public class Simulator extends PApplet {
 
     public void setup() {
         size(displayWidth, displayHeight);
-        cpu = new CPU(200, height - 500);
+        cpu = new CPU();
+        cpuView = new CPUView(200, height - 500);
         os = new OperatingSystem(100, height);
     }
 
@@ -39,13 +41,12 @@ public class Simulator extends PApplet {
     // fetch/execute cycle or tick-tock of the CPU.
     // At the highest level of abstraciton, this is all the whole program really does.
     public void draw() {
+        tickTock();
         background(0);
         drawTitle();
-        tickTock();
+        cpuView.draw(this, cpu);
         drawProcessViews();
         drawQueues();
-        cpu.update();
-        cpu.draw(this);
     }
 
     // This really is a true interrupt handler, and I use it to simulate interrupts. Pressing
@@ -86,6 +87,7 @@ public class Simulator extends PApplet {
     // context switch by placing the current PCB at the tail of the ready queue, and use the
     // restore execution of the process represented by the PCB at the head of the queue.
     private void tickTock() {
+        cpu.tickTock();
         if (!os.readyQueue.isEmpty() && roundRobinCycleLimitReached()) {
             switchContext();
         } else if (os.currentProcess != null) {
