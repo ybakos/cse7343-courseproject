@@ -23,14 +23,8 @@ import java.util.*;
 
 public class Simulator extends PApplet {
 
-    private final static int ROUND_ROBIN_CYCLE_LIMIT = 30;
-
     private CPU cpu;
     private OperatingSystem os;
-
-    private ProcessQueue readyQueue;
-    private ProcessQueue waitQueue;
-    private ProcessControlBlock currentProcess;
 
     // Visual representations of each running process, each corresponding to a PCB in a queue.
     private HashMap<Integer, ProcessView> processViews = new HashMap<Integer, ProcessView>();
@@ -38,9 +32,7 @@ public class Simulator extends PApplet {
     public void setup() {
         size(displayWidth, displayHeight);
         cpu = new CPU(200, height - 500);
-        os = new OperatingSystem();
-        readyQueue = new ProcessQueue(ProcessState.READY, "Ready Queue", 100, height - 225);
-        waitQueue = new ProcessQueue(ProcessState.WAITING, "Wait Queue", 100, height - 50);
+        os = new OperatingSystem(100, height);
     }
 
     // Invoked automatically and over and over again by Processing. This provides an implicit
@@ -64,7 +56,7 @@ public class Simulator extends PApplet {
         if (key == ' ') {
             createNewProcess(os.nextPid++);
         } else if (key == 'b') {
-            blockProcess(currentProcess);
+            blockProcess(os.currentProcess);
         }
     }
 
@@ -94,22 +86,22 @@ public class Simulator extends PApplet {
     // context switch by placing the current PCB at the tail of the ready queue, and use the
     // restore execution of the process represented by the PCB at the head of the queue.
     private void tickTock() {
-        if (!readyQueue.isEmpty() && roundRobinCycleLimitReached()) {
+        if (!os.readyQueue.isEmpty() && roundRobinCycleLimitReached()) {
             switchContext();
-        } else if (currentProcess != null) {
-            execute(currentProcess);
+        } else if (os.currentProcess != null) {
+            execute(os.currentProcess);
         }
     }
 
     // A naive simulation of determining if a process has received enough CPU time.
     private boolean roundRobinCycleLimitReached() {
-        return frameCount % ROUND_ROBIN_CYCLE_LIMIT == 0;
+        return frameCount % os.ROUND_ROBIN_CYCLE_LIMIT == 0;
     }
 
     // Adds a new PCB to the tail of the ready queue, and also creates a ProcessView
     // to visually represent the process for that PCB.
     private void createNewProcess(int pid) {
-        readyQueue.add(new ProcessControlBlock(pid));
+        os.readyQueue.add(new ProcessControlBlock(pid));
         processViews.put(new Integer(pid), new ProcessView(this));
     }
 
@@ -117,13 +109,13 @@ public class Simulator extends PApplet {
     // and restore the execution of the process represented by the PCB at the head
     // of the queue.
     private void switchContext() {
-        if (currentProcess != null) {
-            readyQueue.add(currentProcess);
-            currentProcess.state = ProcessState.READY;
+        if (os.currentProcess != null) {
+            os.readyQueue.add(os.currentProcess);
+            os.currentProcess.state = ProcessState.READY;
         }
-        if (!readyQueue.isEmpty()) {
-            currentProcess = readyQueue.remove();
-            currentProcess.state = ProcessState.RUNNING;
+        if (!os.readyQueue.isEmpty()) {
+            os.currentProcess = os.readyQueue.remove();
+            os.currentProcess.state = ProcessState.RUNNING;
         }
     }
 
@@ -142,8 +134,8 @@ public class Simulator extends PApplet {
     private void blockProcess(ProcessControlBlock pcb) {
         if (pcb == null) return;
         pcb.state = ProcessState.WAITING;
-        waitQueue.add(pcb);
-        currentProcess = null;
+        os.waitQueue.add(pcb);
+        os.currentProcess = null;
         switchContext();
         ProcessView view = processViews.get(new Integer(pcb.pid));
         if (view != null) view.dim();
@@ -153,11 +145,11 @@ public class Simulator extends PApplet {
     // corresponding with the PCB at the head of the queue to be placed back in the ready
     // queue.
     private void interruptAndUnblock(int pid) {
-        ProcessControlBlock waitHead = waitQueue.peek();
+        ProcessControlBlock waitHead = os.waitQueue.peek();
         if (waitHead != null && pid == waitHead.pid) {
-            ProcessControlBlock pcb = waitQueue.remove();
+            ProcessControlBlock pcb = os.waitQueue.remove();
             pcb.state = ProcessState.READY;
-            readyQueue.add(waitHead);
+            os.readyQueue.add(waitHead);
             processViews.get(new Integer(pid)).light();
         }
     }
@@ -169,8 +161,8 @@ public class Simulator extends PApplet {
     }
 
     private void drawQueues() {
-        readyQueue.draw(processViews, this);
-        waitQueue.draw(processViews, this);
+        os.readyQueue.draw(processViews, this);
+        os.waitQueue.draw(processViews, this);
     }
 
 }
