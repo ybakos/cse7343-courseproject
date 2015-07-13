@@ -41,9 +41,7 @@ public class Simulator extends PApplet {
     // At the highest level of abstraciton, this is all the whole program really does.
     public void draw() {
         cpu.tickTock();
-        // This simulates the execution of the OS, since this simulator is abstracting
-        // kernel processes. In a nutshell, this represents the passage of time for the OS.
-        os.syscall("wait", frameCount);
+        os.run(frameCount);
         background(0);
         drawTitle();
         cpuView.draw(this, cpu);
@@ -56,9 +54,11 @@ public class Simulator extends PApplet {
     // resource such as some abstract I/O.
     public void keyPressed() {
         if (key == ' ') {
-            os.syscall("exec", 0);
+            ProcessControlBlock pcb = os.createNewProcess();
+            osView.createNewProcessView(this, pcb);
         } else if (key == 'b') {
-            os.syscall("block", 0);
+            os.blockCurrentProcess();
+            //osView.blockProcess(pcb);
         }
     }
 

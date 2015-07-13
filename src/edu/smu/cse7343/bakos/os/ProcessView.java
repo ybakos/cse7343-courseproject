@@ -37,18 +37,23 @@ public class ProcessView {
     public float size = 10;
 
     public int color;
+    public int pid;
 
-    public ProcessView(PApplet p) {
-        this(p, p.width / 2 + p.random(-50, 50), p.height / 2 + p.random(-50, 50));
+    public ProcessView(PApplet p, ProcessControlBlock pcb) {
+        this(p, p.width / 2 + p.random(-50, 50), p.height / 2 + p.random(-50, 50), pcb);
     }
 
-    public ProcessView(PApplet p, float x, float y) {
+    public ProcessView(PApplet p, float x, float y, ProcessControlBlock pcb) {
         this.p = p;
         location = new PVector(x, y);
         velocity = new PVector(0, 0);
-        color = p.color(p.random(150, 255), p.random(150, 255), p.random(150, 255), 220);
         size = p.random(10, 50);
         xoff = p.random(-1, 1);
+        color = p.color(p.random(150, 255), p.random(150, 255), p.random(150, 255), 220);
+        for (int i = 0; i < pcb.registers.length; ++i) {
+            pcb.registers[i] = color;
+        }
+        pid = pcb.pid;
     }
 
     public void update() {

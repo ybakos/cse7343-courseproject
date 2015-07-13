@@ -27,7 +27,14 @@ public class ProcessQueueView {
         processViews = new HashMap<Integer, ProcessView>();
     }
 
+    public void add(ProcessView view) {
+        processViews.put(new Integer(view.pid), view);
+    }
+
     public void draw(PApplet p, ProcessQueue queue) {
+        for (ProcessView view : processViews.values()) {
+            view.draw();
+        }
         p.pushStyle();
         p.pushMatrix();
         p.translate(x, y);

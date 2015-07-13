@@ -24,31 +24,30 @@ public class OperatingSystem {
     }
 
     public void syscall(String code, int arg) {
-        if ("exec".equals(code)) {
-            createNewProcess();
-        } else if ("block".equals(code)) {
-            blockCurrentProcess();
-        } else if ("wait".equals(code)) {
-            wait(arg);
+        if ("wait".equals(code)) {
+        //    wait(arg);
         }
     }
 
     // Adds a new PCB to the tail of the ready queue, and also creates a ProcessView
     // to visually represent the process for that PCB.
-    private void createNewProcess() {
-        readyQueue.add(new ProcessControlBlock(nextPid));
-        // TODO: extract: processViews.put(new Integer(nextPid), new ProcessView(this));
+    public ProcessControlBlock createNewProcess() {
+        ProcessControlBlock pcb = new ProcessControlBlock(nextPid);
+        readyQueue.add(pcb);
         ++nextPid;
+        return pcb;
     }
 
     // Executes the current process. If it has been given enough CPU time, then conduct a
     // context switch by placing the current PCB at the tail of the ready queue, and use the
     // restore execution of the process represented by the PCB at the head of the queue.
-    private void wait(int elapsedCycles) {
+    public void run(int elapsedCycles) {
         if (!readyQueue.isEmpty() && roundRobinCycleLimitReached(elapsedCycles)) {
             switchContext();
         } else if (currentProcess != null) {
             execute(currentProcess);
+        } else {
+            // idle
         }
     }
 
@@ -75,15 +74,10 @@ public class OperatingSystem {
         // if (view != null) view.update();
     }
 
-    // A naive simulation of determining if a process has received enough CPU time.
-    private boolean roundRobinCycleLimitReached(int elapsedCycles) {
-        return elapsedCycles % ROUND_ROBIN_CYCLE_LIMIT == 0;
-    }
-
     // Simulates the self-blocking of a process, as if it is waiting for a resource.
     // Once the process is blocked, it is placed on the waiting queue, a context switch
     // occurs, and the corresponding view is dimmed to indicate that the process is blocked.
-    private void blockCurrentProcess() {
+    public void blockCurrentProcess() {
         if (currentProcess == null) return;
         currentProcess.state = ProcessState.WAITING;
         waitQueue.add(currentProcess);
@@ -105,5 +99,10 @@ public class OperatingSystem {
     //         processViews.get(new Integer(pid)).light();
     //     }
     // }
+
+    // A naive simulation of determining if a process has received enough CPU time.
+    private boolean roundRobinCycleLimitReached(int elapsedCycles) {
+        return elapsedCycles % ROUND_ROBIN_CYCLE_LIMIT == 0;
+    }
 
 }

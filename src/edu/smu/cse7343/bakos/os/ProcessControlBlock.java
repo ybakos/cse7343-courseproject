@@ -12,6 +12,8 @@
 
 package edu.smu.cse7343.bakos.os;
 
+import processing.core.*;
+
 public class ProcessControlBlock {
 
     private static final int NUMBER_OF_REGISTERS = 10;
@@ -27,5 +29,5 @@ public class ProcessControlBlock {
         programCounter = 0;
         registers = new int[NUMBER_OF_REGISTERS];
     }
-    
+
 }

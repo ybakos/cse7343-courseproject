@@ -24,4 +24,12 @@ public class OperatingSystemView {
         readyQueueView.draw(p, os.readyQueue);
     }
 
+    public void createNewProcessView(PApplet p, ProcessControlBlock pcb) {
+        readyQueueView.add(new ProcessView(p, pcb));
+    }
+
+    public void blockProcess(ProcessControlBlock pcb) {
+        // TODO
+    }
+
 }
