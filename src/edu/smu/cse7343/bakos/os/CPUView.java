@@ -12,6 +12,8 @@ import processing.core.*;
 
 public class CPUView {
 
+    private PApplet p;
+    private CPU cpu;
     int x;
     int y;
     final int WIDTH = 200;
@@ -21,12 +23,14 @@ public class CPUView {
     final int INTERNAL_LABEL_COLOR = 200;
     final int MAIN_LABEL_COLOR = 50;
 
-    public CPUView(int x, int y) {
+    public CPUView(CPU cpu, int x, int y, PApplet p) {
+        this.cpu = cpu;
         this.x = x;
         this.y = y;
+        this.p = p;
     }
 
-    public void draw(PApplet p, CPU cpu) {
+    public void draw() {
         p.pushStyle();
         p.pushMatrix();
         p.translate(x, y);

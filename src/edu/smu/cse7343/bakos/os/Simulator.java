@@ -31,9 +31,9 @@ public class Simulator extends PApplet {
     public void setup() {
         size(displayWidth, displayHeight);
         cpu = new CPU();
-        cpuView = new CPUView(200, height - 500);
-        os = new OperatingSystem();
-        osView = new OperatingSystemView(100, height);
+        //os = new OperatingSystem(cpu);
+        cpuView = new CPUView(cpu, 200, height - 500, this);
+        //osView = new OperatingSystemView(os, 100, height, this);
     }
 
     // Invoked automatically and over and over again by Processing. This provides an implicit
@@ -41,26 +41,26 @@ public class Simulator extends PApplet {
     // At the highest level of abstraciton, this is all the whole program really does.
     public void draw() {
         cpu.tickTock();
-        os.run(frameCount);
+        //os.run(frameCount);
         background(0);
         drawTitle();
-        cpuView.draw(this, cpu);
-        osView.draw(this, os);
+        cpuView.draw();
+        //osView.draw(this, os);
     }
 
     // This really is a true interrupt handler, and I use it to simulate interrupts. Pressing
     // the space bar will spawn a new process, adding it to the ready queue. Pressing the B
     // key will cause the currently executing process to self-block, to "fake" waiting for a
     // resource such as some abstract I/O.
-    public void keyPressed() {
-        if (key == ' ') {
-            ProcessControlBlock pcb = os.createNewProcess();
-            osView.createNewProcessView(this, pcb);
-        } else if (key == 'b') {
-            os.blockCurrentProcess();
-            //osView.blockProcess(pcb);
-        }
-    }
+    // public void keyPressed() {
+    //     if (key == ' ') {
+    //         ProcessControlBlock pcb = os.createNewProcess();
+    //         osView.createNewProcessView(this, pcb);
+    //     } else if (key == 'b') {
+    //         os.blockCurrentProcess();
+    //         //osView.blockProcess(pcb);
+    //     }
+    // }
 
     // This really is a true interrupt handler, and I use it to simulate an interrupt that
     // signals a process in the wait queue that its resource is ready and that the process

@@ -11,20 +11,24 @@ import processing.core.*;
 
 public class OperatingSystemView {
 
+    private PApplet p;
+    private OperatingSystem os;
     private ProcessQueueView readyQueueView;
     private ProcessQueueView waitQueueView;
 
-    public OperatingSystemView(int x, int y) {
+    public OperatingSystemView(OperatingSystem os, int x, int y, PApplet p) {
+        this.os = os;
         waitQueueView = new ProcessQueueView("Wait Queue", x, y - 50);
         readyQueueView = new ProcessQueueView("Ready Queue", x, y - 225);
+        this.p = p;
     }
 
-    public void draw(PApplet p, OperatingSystem os) {
+    public void draw() {
         waitQueueView.draw(p, os.waitQueue);
         readyQueueView.draw(p, os.readyQueue);
     }
 
-    public void createNewProcessView(PApplet p, ProcessControlBlock pcb) {
+    public void createNewProcessView(ProcessControlBlock pcb) {
         readyQueueView.add(new ProcessView(p, pcb));
     }
 

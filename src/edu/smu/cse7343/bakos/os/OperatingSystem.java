@@ -12,12 +12,14 @@ public class OperatingSystem {
     public static final int ROUND_ROBIN_CYCLE_LIMIT = 30;
     private static final int FAUX_INITIAL_USERSPACE_PID = 10;
 
+    private CPU cpu;
     public int nextPid = FAUX_INITIAL_USERSPACE_PID;
     public ProcessQueue readyQueue;
     public ProcessQueue waitQueue;
     public ProcessControlBlock currentProcess;
 
-    public OperatingSystem() {
+    public OperatingSystem(CPU cpu) {
+        this.cpu = cpu;
         readyQueue = new ProcessQueue(ProcessState.READY);
         waitQueue = new ProcessQueue(ProcessState.WAITING);
         currentProcess = null; // TODO: necessary after new CPU integration?
