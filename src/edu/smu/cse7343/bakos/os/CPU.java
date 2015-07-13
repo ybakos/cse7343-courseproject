@@ -17,6 +17,7 @@ public class CPU {
 
     public static final int NUMBER_OF_REGISTERS = 10;
     public int programCounter = 0;
+    public int cycleCount = 0;
     public int[] registers = new int[NUMBER_OF_REGISTERS];
     public boolean isIdle = true;
 
@@ -24,6 +25,7 @@ public class CPU {
     }
 
     public void tickTock() {
+        ++cycleCount;
         if (isIdle) {
             programCounter = (programCounter + 1) % 5;
         } else {

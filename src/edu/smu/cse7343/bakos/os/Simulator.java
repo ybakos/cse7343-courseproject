@@ -31,7 +31,7 @@ public class Simulator extends PApplet {
     public void setup() {
         size(displayWidth, displayHeight);
         cpu = new CPU();
-        //os = new OperatingSystem(cpu);
+        os = new OperatingSystem(cpu);
         cpuView = new CPUView(cpu, 200, height - 500, this);
         //osView = new OperatingSystemView(os, 100, height, this);
     }
@@ -41,7 +41,7 @@ public class Simulator extends PApplet {
     // At the highest level of abstraciton, this is all the whole program really does.
     public void draw() {
         cpu.tickTock();
-        //os.run(frameCount);
+        os.manageProcesses(); // simulates execution of kernel processes
         background(0);
         drawTitle();
         cpuView.draw();
@@ -52,15 +52,14 @@ public class Simulator extends PApplet {
     // the space bar will spawn a new process, adding it to the ready queue. Pressing the B
     // key will cause the currently executing process to self-block, to "fake" waiting for a
     // resource such as some abstract I/O.
-    // public void keyPressed() {
-    //     if (key == ' ') {
-    //         ProcessControlBlock pcb = os.createNewProcess();
-    //         osView.createNewProcessView(this, pcb);
-    //     } else if (key == 'b') {
-    //         os.blockCurrentProcess();
-    //         //osView.blockProcess(pcb);
-    //     }
-    // }
+    public void keyPressed() {
+        if (key == ' ') {
+            os.exec();
+        } else if (key == 'b') {
+            os.blockCurrentProcess();
+            //osView.blockProcess(pcb);
+        }
+    }
 
     // This really is a true interrupt handler, and I use it to simulate an interrupt that
     // signals a process in the wait queue that its resource is ready and that the process
