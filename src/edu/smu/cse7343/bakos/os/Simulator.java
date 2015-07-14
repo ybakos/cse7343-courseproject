@@ -25,6 +25,8 @@ public class Simulator extends PApplet {
 
     private CPU cpu;
     private CPUView cpuView;
+    private Memory memory;
+    private MemoryView memoryView;
     private OperatingSystem os;
     private OperatingSystemView osView;
 
@@ -32,6 +34,8 @@ public class Simulator extends PApplet {
         size(displayWidth, displayHeight);
         cpu = new CPU();
         os = new OperatingSystem(cpu);
+        memory = new Memory(width - 200);
+        memoryView = new MemoryView(memory, 100, height - 800, this);
         cpuView = new CPUView(cpu, 200, height - 500, this);
         osView = new OperatingSystemView(os, 100, height, this);
     }
@@ -45,6 +49,7 @@ public class Simulator extends PApplet {
         background(0);
         drawTitle();
         cpuView.draw();
+        memoryView.draw();
         osView.draw();
     }
 
