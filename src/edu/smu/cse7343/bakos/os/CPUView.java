@@ -43,7 +43,7 @@ public class CPUView {
         p.rectMode(p.CORNER);
         for (int i = 0; i < cpu.registers.length; ++i) {
             p.fill(cpu.registers[i]);
-            p.rect(-WIDTH / 2 + 70 + (i * 10), -HEIGHT / 2 + 30, 10, 15);
+            p.rect(-WIDTH / 2 + 70 + (i * 10), -HEIGHT / 2 + 50, 10, 15);
         }
         // Labels
         p.fill(MAIN_LABEL_COLOR);
@@ -53,9 +53,10 @@ public class CPUView {
         p.fill(INTERNAL_LABEL_COLOR);
         p.textSize(12);
         p.textAlign(p.LEFT);
-        p.text("PC: " + cpu.programCounter, -WIDTH / 2 + 10, -HEIGHT / 2 + 20);
-        if (cpu.isIdle) p.text("(kernel idle process)", -WIDTH / 2 + 50, -HEIGHT / 2 + 20);
-        p.text("Registers", -WIDTH / 2 + 10, -HEIGHT / 2 + 40);
+        p.text("Cycle Count: " + cpu.cycleCount, -WIDTH / 2 + 10, -HEIGHT / 2 + 20);
+        p.text("PC: " + cpu.programCounter, -WIDTH / 2 + 10, -HEIGHT / 2 + 40);
+        if (cpu.isIdle) p.text("(kernel idle process)", -WIDTH / 2 + 50, -HEIGHT / 2 + 40);
+        p.text("Registers", -WIDTH / 2 + 10, -HEIGHT / 2 + 60);
         p.popMatrix();
         p.popStyle();
     }
