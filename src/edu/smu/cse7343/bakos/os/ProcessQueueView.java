@@ -45,7 +45,10 @@ public class ProcessQueueView {
         p.textSize(18);
         p.text("Head", -50, 5);
         p.line(0, 0, 500, 0);
-
+        for (ProcessControlBlock pcb : queue.queue) {
+            // draw the pcbView in its position
+            // draw the pcbView being executed by the CPU
+        }
         p.popMatrix();
         p.popStyle();
     }
