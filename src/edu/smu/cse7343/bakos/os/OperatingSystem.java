@@ -11,16 +11,22 @@ public class OperatingSystem {
 
     public static final int ROUND_ROBIN_CYCLE_LIMIT = 30;
     private static final int FAUX_INITIAL_USERSPACE_PID = 10;
+    private static final int DEFAULT_HEAP_SIZE = 10;
+    private static final int DEFAULT_STACK_SIZE = 10;
 
     private CPU cpu;
+    private Memory memory;
+    private int nextAvailableMemoryAddress;
     private int currentPid;
     private int nextAvailablePid;
     public ProcessQueue readyQueue;
     public ProcessQueue waitQueue;
 
-    public OperatingSystem(CPU cpu) {
+    public OperatingSystem(CPU cpu, Memory memory) {
         this.cpu = cpu;
-        currentPid = 0;
+        this.memory = memory;
+        nextAvailableMemoryAddress = 0;
+        currentPid = 0; // idle
         nextAvailablePid = FAUX_INITIAL_USERSPACE_PID;
         readyQueue = new ProcessQueue(ProcessState.READY);
         waitQueue = new ProcessQueue(ProcessState.WAITING);
@@ -36,7 +42,13 @@ public class OperatingSystem {
     // Execute a new process, by adding a PCB for the new process to the tail
     // of the ready queue.
     public void exec() {
-        readyQueue.add(new ProcessControlBlock(nextAvailablePid++));
+        Program p = new Program(); // load program from disk
+
+        // determine total memory needed
+        // allocate memory
+        // store in memory
+        ProcessControlBlock pcb = new ProcessControlBlock(nextAvailablePid++);
+        readyQueue.add(pcb);
     }
 
     // Place the currently executing process' PCB at the tail of the ready queue,

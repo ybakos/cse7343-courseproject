@@ -23,81 +23,33 @@ import processing.core.*;
 
 public class ProcessView {
 
-    private final float MAX_VELOCITY = 2;
-    private final float ACCELERATION_SCALE = 0.4f;
-    private final float NOISE_DELTA = 0.01f;
-    private final float GROWTH_DELTA = 0.01f;
-    private final float DEFAULT_X_OFFSET = 0.0f;
-    private final float PROBABILITY_OF_FOLLOWING_MOUSE = 0.8f;
     
     private PApplet p;
-    private PVector location;
-    private PVector velocity;
-    private float xoff = DEFAULT_X_OFFSET;
-    public float size = 10;
-
-    public int color;
-    public int pid;
+    private ProcessControlBlock pcb;
 
     public ProcessView(PApplet p, ProcessControlBlock pcb) {
-        this(p, p.width / 2 + p.random(-50, 50), p.height / 2 + p.random(-50, 50), pcb);
-    }
-
-    public ProcessView(PApplet p, float x, float y, ProcessControlBlock pcb) {
         this.p = p;
-        location = new PVector(x, y);
-        velocity = new PVector(0, 0);
-        size = p.random(10, 50);
-        xoff = p.random(-1, 1);
-        color = p.color(p.random(150, 255), p.random(150, 255), p.random(150, 255), 220);
-        for (int i = 0; i < pcb.registers.length; ++i) {
-            pcb.registers[i] = color;
-        }
-        pid = pcb.pid;
+        this.pcb = pcb;
     }
 
     public void update() {
-        PVector acceleration = acceleration();
-        acceleration.mult(ACCELERATION_SCALE);
-        velocity.add(acceleration);
-        velocity.limit(MAX_VELOCITY);
-        location.add(velocity);
-        if (location.x > p.width) location.x = 0;
-        if (location.x < 0) location.x = p.width;
-        if (location.y > p.height) location.y = 0;
-        if (location.y < 0) location.y = p.height;
-        xoff += NOISE_DELTA;
-        size += GROWTH_DELTA;
+
     }
 
     public void draw() {
-        p.pushStyle();
-        p.pushMatrix();
-        p.translate(location.x, location.y);
-        p.fill(color);
-        p.ellipse(0, 0, size, size);
-        p.popMatrix();
-        p.popStyle();
+
     }
 
     public void dim() {
-        color = p.color(p.red(color), p.green(color), p.blue(color), 100);
+        //color = p.color(p.red(color), p.green(color), p.blue(color), 100);
     }
 
     public void light() {
-        color = p.color(p.red(color), p.green(color), p.blue(color), 220);   
+        //color = p.color(p.red(color), p.green(color), p.blue(color), 220);   
     }
 
     public boolean isClicked(int x, int y) {
-        return p.dist(location.x, location.y, x, y) < (size / 2);
-    }
-
-    private PVector acceleration() {
-        if (p.random(0, 1) < PROBABILITY_OF_FOLLOWING_MOUSE) {
-            PVector mouseVector = PVector.sub(new PVector(p.mouseX, p.mouseY), location);
-            mouseVector.normalize(); // Fuck you, Processing!
-            return mouseVector;      // This whole thing could be a one-liner.
-        } else return PVector.fromAngle(p.noise(xoff) * p.TWO_PI);
+        return false; //p.dist(location.x, location.y, x, y) < (size / 2);
     }
 
 }

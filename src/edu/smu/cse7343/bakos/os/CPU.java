@@ -18,7 +18,7 @@ public class CPU {
     public static final int NUMBER_OF_REGISTERS = 10;
     public int programCounter = 0;
     public int cycleCount = 0;
-    public int[] registers = new int[NUMBER_OF_REGISTERS];
+    public float[] registers = new float[NUMBER_OF_REGISTERS];
     public boolean isIdle = true;
 
     public CPU() {

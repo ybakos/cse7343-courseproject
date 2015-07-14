@@ -24,13 +24,13 @@ public class ProcessControlBlock {
     public int pid;
     public ProcessState state;
     public int programCounter;
-    public int[] registers;
+    public float[] registers;
 
     public ProcessControlBlock(int pid) {
         this.pid = pid;
         state = ProcessState.NEW;
         programCounter = 0;
-        registers = new int[CPU.NUMBER_OF_REGISTERS];
+        registers = new float[CPU.NUMBER_OF_REGISTERS];
     }
 
 }

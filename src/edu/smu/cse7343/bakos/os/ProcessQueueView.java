@@ -20,7 +20,7 @@ public class ProcessQueueView {
     private int y;
 
     // Visual representations of each running process, each corresponding to a PCB in a queue.
-    HashMap<Integer, ProcessView> processViews;
+//    HashMap<Integer, ProcessView> processViews;
 
     public ProcessQueueView(ProcessQueue queue, String title, int x, int y, PApplet p) {
         this.queue = queue;
@@ -28,11 +28,11 @@ public class ProcessQueueView {
         this.title = title;
         this.x = x;
         this.y = y;
-        processViews = new HashMap<Integer, ProcessView>();
+//        processViews = new HashMap<Integer, ProcessView>();
     }
 
     public void add(ProcessView view) {
-        processViews.put(new Integer(view.pid), view);
+//        processViews.put(new Integer(view.pid), view);
     }
 
     public void draw() {
@@ -45,12 +45,27 @@ public class ProcessQueueView {
         p.textSize(18);
         p.text("Head", -50, 5);
         p.line(0, 0, 500, 0);
-        for (ProcessControlBlock pcb : queue.queue) {
-            // draw the pcbView in its position
-            // draw the pcbView being executed by the CPU
-        }
+        // float sizeOffset = 0.0f;
+        // for (ProcessControlBlock pcb : queue.queue) {
+        //     ProcessView view = processViews.get(new Integer(pcb.pid));
+        //     view.draw();
+        //     p.fill(view.color);
+        //     p.ellipse(sizeOffset + (view.size / 2.0f), 0, view.size, view.size);
+        //     sizeOffset += (view.size / 2.0f);
+        // }
         p.popMatrix();
         p.popStyle();
+        // for (ProcessControlBlock pcb : queue.queue) {
+        //     draw the pcbView in its position
+        //     draw the pcbView being executed by the CPU
+        //     p.pushStyle();
+        //     p.pushMatrix();
+        //     p.translate(location.x, location.y);
+        //     p.fill(color);
+        //     p.ellipse(0, 0, size, size);
+        //     p.popMatrix();
+        //     p.popStyle();
+        // }
     }
 
     // public void draw() {

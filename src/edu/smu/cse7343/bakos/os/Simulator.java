@@ -30,14 +30,19 @@ public class Simulator extends PApplet {
     private OperatingSystem os;
     private OperatingSystemView osView;
 
+    private Program deleteMe;
+
     public void setup() {
         size(displayWidth, displayHeight);
         cpu = new CPU();
-        os = new OperatingSystem(cpu);
-        memory = new Memory(width - 200);
+        memory = new Memory(width - 200); // simulated size, per screen width
+        os = new OperatingSystem(cpu, memory);
+        Program.initialize(this); // program code needs to use handy Processing functions
         memoryView = new MemoryView(memory, 100, height - 800, this);
         cpuView = new CPUView(cpu, 200, height - 500, this);
         osView = new OperatingSystemView(os, 100, height, this);
+
+        deleteMe = new Program();
     }
 
     // Invoked automatically and over and over again by Processing. This provides an implicit
@@ -51,6 +56,15 @@ public class Simulator extends PApplet {
         cpuView.draw();
         memoryView.draw();
         osView.draw();
+
+        deleteMe();
+    }
+
+    private void deleteMe() {
+        deleteMe.step();
+        translate(deleteMe.location.x, deleteMe.location.y);
+        fill(deleteMe.color);
+        ellipse(0, 0, deleteMe.size, deleteMe.size);
     }
 
     // This really is a true interrupt handler, and I use it to simulate interrupts. Pressing
@@ -70,11 +84,7 @@ public class Simulator extends PApplet {
     // signals a process in the wait queue that its resource is ready and that the process
     // can be put back on the ready queue.
     public void mousePressed() {
-        // for (Map.Entry<Integer, ProcessView> entry : processViews.entrySet()) {
-        //     if (entry.getValue().isClicked(mouseX, mouseY)) {
-        //         interruptAndUnblock(entry.getKey().intValue());
-        //     }
-        // }
+        
     }
 
     private void drawTitle() {
