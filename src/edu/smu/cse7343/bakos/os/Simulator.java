@@ -33,7 +33,7 @@ public class Simulator extends PApplet {
         cpu = new CPU();
         os = new OperatingSystem(cpu);
         cpuView = new CPUView(cpu, 200, height - 500, this);
-        //osView = new OperatingSystemView(os, 100, height, this);
+        osView = new OperatingSystemView(os, 100, height, this);
     }
 
     // Invoked automatically and over and over again by Processing. This provides an implicit
@@ -45,7 +45,7 @@ public class Simulator extends PApplet {
         background(0);
         drawTitle();
         cpuView.draw();
-        //osView.draw(this, os);
+        osView.draw();
     }
 
     // This really is a true interrupt handler, and I use it to simulate interrupts. Pressing
@@ -56,7 +56,7 @@ public class Simulator extends PApplet {
         if (key == ' ') {
             os.exec();
         } else if (key == 'b') {
-            os.blockCurrentProcess();
+            //os.blockCurrentProcess();
             //osView.blockProcess(pcb);
         }
     }

@@ -18,22 +18,14 @@ public class OperatingSystemView {
 
     public OperatingSystemView(OperatingSystem os, int x, int y, PApplet p) {
         this.os = os;
-        waitQueueView = new ProcessQueueView("Wait Queue", x, y - 50);
-        readyQueueView = new ProcessQueueView("Ready Queue", x, y - 225);
         this.p = p;
+        waitQueueView = new ProcessQueueView(os.waitQueue, "Wait Queue", x, y - 50, p);
+        readyQueueView = new ProcessQueueView(os.readyQueue, "Ready Queue", x, y - 225, p);
     }
 
     public void draw() {
-        waitQueueView.draw(p, os.waitQueue);
-        readyQueueView.draw(p, os.readyQueue);
-    }
-
-    public void createNewProcessView(ProcessControlBlock pcb) {
-        readyQueueView.add(new ProcessView(p, pcb));
-    }
-
-    public void blockProcess(ProcessControlBlock pcb) {
-        // TODO
+        waitQueueView.draw();
+        readyQueueView.draw();
     }
 
 }

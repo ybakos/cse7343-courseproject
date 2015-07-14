@@ -14,7 +14,7 @@ public class OperatingSystem {
 
     private CPU cpu;
     private int currentPid;
-    public int nextAvailablePid;
+    private int nextAvailablePid;
     public ProcessQueue readyQueue;
     public ProcessQueue waitQueue;
 
@@ -33,8 +33,8 @@ public class OperatingSystem {
         System.out.println("Ready queue has: " + readyQueue.queue.size());
     }
 
-    // Simulates an exec system call, and adds a PCB for a new process to the tail of
-    // the ready queue.
+    // Execute a new process, by adding a PCB for the new process to the tail
+    // of the ready queue.
     public void exec() {
         readyQueue.add(new ProcessControlBlock(nextAvailablePid++));
     }
@@ -66,15 +66,15 @@ public class OperatingSystem {
     // Simulates the self-blocking of a process, as if it is waiting for a resource.
     // Once the process is blocked, it is placed on the waiting queue, a context switch
     // occurs, and the corresponding view is dimmed to indicate that the process is blocked.
-    public void blockCurrentProcess() {
-        // if (currentProcess == null) return;
-        // currentProcess.state = ProcessState.WAITING;
-        // waitQueue.add(currentProcess);
-        // // TODO: extract ProcessView view = processViews.get(new Integer(currentProcess.pid));
-        // // if (view != null) view.dim();
-        // currentProcess = null;
-        // switchContext();
-    }
+    // public void blockCurrentProcess() {
+    //     if (currentProcess == null) return;
+    //     currentProcess.state = ProcessState.WAITING;
+    //     waitQueue.add(currentProcess);
+    //     // TODO: extract ProcessView view = processViews.get(new Integer(currentProcess.pid));
+    //     // if (view != null) view.dim();
+    //     currentProcess = null;
+    //     switchContext();
+    // }
 
     // Simulates the availability of a resource and an interrupt that allows the process
     // corresponding with the PCB at the head of the queue to be placed back in the ready
@@ -94,6 +94,8 @@ public class OperatingSystem {
         return cpu.cycleCount % ROUND_ROBIN_CYCLE_LIMIT == 0;
     }
 
+    // In this simulation, process id 0 is the kernel idle process; all other
+    // processes are userspace processes.
     private boolean cpuIsExecutingAUserspaceProcess() {
         return currentPid > 0;
     }
