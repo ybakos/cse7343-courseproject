@@ -20,7 +20,9 @@ public class ProcessControlBlock {
     private int lastCycle;   // The last time this pcb was executed
     private int waitEventId; // Resource of id waiting for when in WAIT
     private int cycleCount;  // Amount of CPU time accumulated
-    
+    private int memoryBaseAddress;
+    private int memoryLimitAddress;
+
     public int pid;
     public ProcessState state;
     public int programCounter;

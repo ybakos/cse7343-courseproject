@@ -19,4 +19,12 @@ public class Memory {
         return registers.length;
     }
 
+    public void write(int address, float value) {
+        if (address >= registers.length) {
+            System.out.println("TRAP: Address out of bounds."); // TODO
+        } else {
+            registers[address] = value;
+        }
+    }
+
 }

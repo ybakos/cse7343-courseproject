@@ -35,20 +35,12 @@ public class MemoryView {
         p.pushStyle();
         p.pushMatrix();
         p.translate(x, y);
-        // Body
+        // Body / registers
         p.stroke(STROKE_COLOR);
         p.fill(FILL_COLOR);
         p.rectMode(p.CORNER);
         p.rect(0, 0, width, HEIGHT);
-        // Registers
-
         // Labels
-        p.fill(STROKE_COLOR);
-        p.textSize(10);
-        p.text("Virtual Addresses", -53, HEIGHT + 9);
-        for (int i = 0; i < width; i += 100) {
-            p.text(i, i, HEIGHT + 10);
-        }
         p.fill(MAIN_LABEL_COLOR);
         p.textSize(32);
         p.textAlign(p.CENTER);
@@ -56,10 +48,14 @@ public class MemoryView {
         p.textSize(18);
         p.textAlign(p.LEFT);
         p.text("Each vertical column of pixels represents one 64-bit register. 1 pixel is 1 bit.", 200, -20);
-        
         p.textSize(18);
         p.text("Registers", -90, HEIGHT / 2 + 8);
-        // TODO draw register labels
+        p.fill(STROKE_COLOR);
+        p.textSize(10);
+        p.text("Logical Addresses", -100, HEIGHT + 9);
+        for (int i = 0; i < width; i += 100) {
+            p.text(256000 + i, i, HEIGHT + 10);
+        }
         p.popMatrix();
         p.popStyle();
     }

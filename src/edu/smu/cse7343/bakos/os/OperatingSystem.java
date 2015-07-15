@@ -25,7 +25,7 @@ public class OperatingSystem {
     public OperatingSystem(CPU cpu, Memory memory) {
         this.cpu = cpu;
         this.memory = memory;
-        nextAvailableMemoryAddress = 0;
+        nextAvailableMemoryAddress = 0; // Logical. -> 256000
         currentPid = 0; // idle
         nextAvailablePid = FAUX_INITIAL_USERSPACE_PID;
         readyQueue = new ProcessQueue(ProcessState.READY);
@@ -43,12 +43,24 @@ public class OperatingSystem {
     // of the ready queue.
     public void exec() {
         Program p = new Program(); // load program from disk
-
-        // determine total memory needed
         // allocate memory
+        int memoryNeeded = determineMemoryAllocSize(p);
+        int base = nextAvailableMemoryAddress;
+        nextAvailableMemoryAddress += memoryNeeded;
         // store in memory
+        storeInMemory(base, memoryNeeded, p);
         ProcessControlBlock pcb = new ProcessControlBlock(nextAvailablePid++);
+        // TODO add base and limit, etc to pcb
         readyQueue.add(pcb);
+    }
+
+    private void storeInMemory(int baseAddress, int memoryNeeded, Program p) {
+        // TODO use memory.write(...);
+    }
+
+    private int determineMemoryAllocSize(Program p) {
+        // TODO
+        return 100;
     }
 
     // Place the currently executing process' PCB at the tail of the ready queue,
