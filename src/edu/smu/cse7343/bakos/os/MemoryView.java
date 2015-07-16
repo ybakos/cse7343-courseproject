@@ -35,11 +35,19 @@ public class MemoryView {
         p.pushStyle();
         p.pushMatrix();
         p.translate(x, y);
-        // Body / registers
+        // Body
         p.stroke(STROKE_COLOR);
         p.fill(FILL_COLOR);
         p.rectMode(p.CORNER);
         p.rect(0, 0, width, HEIGHT);
+        // Registers
+        for (int i = 0; i < width; ++i) {
+            if (memory.registers[i] != 0) {
+                System.out.println("address " + i + ": " + memory.registers[i]);
+                p.stroke(memory.registers[i]);
+                p.line(i, 0, i, HEIGHT);            
+            }
+        }
         // Labels
         p.fill(MAIN_LABEL_COLOR);
         p.textSize(32);

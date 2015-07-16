@@ -47,7 +47,7 @@ public class Simulator extends PApplet {
 
     // Invoked automatically and over and over again by Processing. This provides an implicit
     // means of simulating a fetch/execute cycle or tick-tock of the CPU.
-    // At the highest level of abstraciton, this is all the whole simulation really does.
+    // At the highest level of abstraction, this is all the whole simulation really does.
     public void draw() {
         cpu.tickTock();
         os.manageProcesses(); // simulates execution of kernel processes

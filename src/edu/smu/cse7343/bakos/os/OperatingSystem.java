@@ -55,12 +55,12 @@ public class OperatingSystem {
     }
 
     private void storeInMemory(int baseAddress, int memoryNeeded, Program p) {
-        // TODO use memory.write(...);
+        memory.write(baseAddress, p.color);
     }
 
     private int determineMemoryAllocSize(Program p) {
         // TODO
-        return 100;
+        return 50;
     }
 
     // Place the currently executing process' PCB at the tail of the ready queue,
