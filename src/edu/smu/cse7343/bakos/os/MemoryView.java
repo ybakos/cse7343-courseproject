@@ -43,9 +43,9 @@ public class MemoryView {
         // Registers
         for (int i = 0; i < width; ++i) {
             if (memory.registers[i] != 0) {
-                System.out.println("address " + i + ": " + memory.registers[i]);
-                p.stroke(memory.registers[i]);
-                p.line(i, 0, i, HEIGHT);            
+            //    System.out.println("address " + i + ": " + memory.registers[i]);
+                p.stroke(Float.floatToRawIntBits(memory.registers[i]));
+                p.line(i + 1, 0 + 1, i + 1, HEIGHT - 1);            
             }
         }
         // Labels

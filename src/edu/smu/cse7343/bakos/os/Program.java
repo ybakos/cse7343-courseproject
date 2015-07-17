@@ -11,7 +11,7 @@ import processing.core.*;
 
 public class Program {
 
-    private static PApplet p; // For accessing Processing functions within a Program
+    public static PApplet p; // For accessing Processing functions within a Program
 
     private final float MAX_VELOCITY = 2;
     private final float ACCELERATION_SCALE = 0.4f;
@@ -21,8 +21,8 @@ public class Program {
     private final float PROBABILITY_OF_FOLLOWING_MOUSE = 0.8f;
 
     public PVector location;
-    private PVector velocity;
-    private float xoff = DEFAULT_X_OFFSET;
+    public PVector velocity;
+    public float xoff = DEFAULT_X_OFFSET;
     public float size = 10;
 
     public int color;

@@ -55,7 +55,19 @@ public class OperatingSystem {
     }
 
     private void storeInMemory(int baseAddress, int memoryNeeded, Program p) {
-        memory.write(baseAddress, p.color);
+        for(int i = baseAddress; i < baseAddress + 20; ++i) {
+            memory.write(i, Float.intBitsToFloat(p.color));
+        }
+        memory.write(baseAddress + 21, p.location.x);
+        memory.write(baseAddress + 22, p.location.y);
+        memory.write(baseAddress + 23, p.velocity.x);
+        memory.write(baseAddress + 24, p.velocity.y);
+        memory.write(baseAddress + 25, p.xoff);
+        memory.write(baseAddress + 26, p.size);
+        for(int i = baseAddress + memoryNeeded; i > baseAddress + memoryNeeded -10; --i) {
+            memory.write(i, Float.intBitsToFloat(p.color));    
+        }
+        memory.write(nextAvailableMemoryAddress, Float.intBitsToFloat(p.p.color(255, 0, 0)));
     }
 
     private int determineMemoryAllocSize(Program p) {
