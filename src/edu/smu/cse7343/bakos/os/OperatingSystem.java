@@ -7,6 +7,8 @@
 
 package edu.smu.cse7343.bakos.os;
 
+import java.util.*;
+
 public class OperatingSystem {
 
     public static final int ROUND_ROBIN_CYCLE_LIMIT = 30;
@@ -22,6 +24,8 @@ public class OperatingSystem {
     public ProcessQueue readyQueue;
     public ProcessQueue waitQueue;
 
+    private Random rand;
+
     public OperatingSystem(CPU cpu, Memory memory) {
         this.cpu = cpu;
         this.memory = memory;
@@ -30,6 +34,7 @@ public class OperatingSystem {
         nextAvailablePid = FAUX_INITIAL_USERSPACE_PID;
         readyQueue = new ProcessQueue(ProcessState.READY);
         waitQueue = new ProcessQueue(ProcessState.WAITING);
+        rand = new Random();
     }
 
     public void manageProcesses() {
@@ -70,9 +75,10 @@ public class OperatingSystem {
         memory.write(nextAvailableMemoryAddress, Float.intBitsToFloat(p.p.color(255, 0, 0)));
     }
 
+    // Simulates different program sizes and initial stack/heap space, randomly returning
+    // between 32 and 64.
     private int determineMemoryAllocSize(Program p) {
-        // TODO
-        return 50;
+        return rand.nextInt(32) + 36;
     }
 
     // Place the currently executing process' PCB at the tail of the ready queue,
