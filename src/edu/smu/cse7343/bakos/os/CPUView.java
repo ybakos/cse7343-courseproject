@@ -57,8 +57,13 @@ public class CPUView {
         p.text("PC: " + cpu.programCounter, -WIDTH / 2 + 10, -HEIGHT / 2 + 40);
         if (cpu.isIdle) p.text("(kernel idle process)", -WIDTH / 2 + 50, -HEIGHT / 2 + 40);
         p.text("Registers", -WIDTH / 2 + 10, -HEIGHT / 2 + 60);
-        p.text("Base: " + cpu.baseRegister, -WIDTH / 2 + 10, HEIGHT / 2 - 30);
-        p.text("Limit: " + cpu.limitRegister, -WIDTH / 2 + 10, HEIGHT / 2 - 10);
+        if (cpu.isIdle) {
+            p.text("Base: 256 (kernel idle process)", -WIDTH / 2 + 10, HEIGHT / 2 - 30);
+            p.text("Limit: 511 (kernel idle process)", -WIDTH / 2 + 10, HEIGHT / 2 - 10);
+        } else {
+            p.text("Base: " + (cpu.baseRegister + 256000), -WIDTH / 2 + 10, HEIGHT / 2 - 30);
+            p.text("Limit: " + (cpu.limitRegister + 256000), -WIDTH / 2 + 10, HEIGHT / 2 - 10);
+        }
         p.popMatrix();
         p.popStyle();
         // current program

@@ -56,7 +56,7 @@ public class Program {
         if (location.y > p.height) location.y = 0;
         if (location.y < 0) location.y = p.height;
         xoff += NOISE_DELTA;
-        size += GROWTH_DELTA;
+        //size += GROWTH_DELTA;
     }
 
     private PVector acceleration() {

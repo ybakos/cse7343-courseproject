@@ -72,11 +72,11 @@ public class OperatingSystem {
         System.out.println("Dispatch!");
         if (readyQueue.isEmpty()) return;
         if (cpuIsExecutingAUserspaceProcess()) {
-            // ProcessControlBlock pcb = new ProcessControlBlock(currentPid, ??, 0);
-            // pcb.state = ProcessState.READY;
-            // pcb.programCounter = cpu.programCounter;
+            ProcessControlBlock pcb = new ProcessControlBlock(currentPid, cpu.baseRegister, cpu.limitRegister, cpu.currentProgram);
+            pcb.state = ProcessState.READY;
+            pcb.programCounter = cpu.programCounter;
             // pcb.registers = cpu.registers.clone();
-            // readyQueue.add(pcb);
+            readyQueue.add(pcb);
         }
         dispatch(readyQueue.remove());
     }
