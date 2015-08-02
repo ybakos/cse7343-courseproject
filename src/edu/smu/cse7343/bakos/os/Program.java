@@ -13,6 +13,7 @@ public class Program {
 
     public static PApplet p; // For accessing Processing functions within a Program
 
+    private final float DEFAULT_MEMORY_FOOTPRINT = 36;
     private final float MAX_VELOCITY = 2;
     private final float ACCELERATION_SCALE = 0.4f;
     private final float NOISE_DELTA = 0.01f;
@@ -22,8 +23,8 @@ public class Program {
 
     public PVector location;
     public PVector velocity;
-    public float xoff = DEFAULT_X_OFFSET;
-    public float size = 10;
+    public float xoff;
+    public float size;
 
     public int color;
 
@@ -33,6 +34,7 @@ public class Program {
         size = p.random(10, 50);
         xoff = p.random(-1, 1);
         color = p.color(p.random(150, 255), p.random(150, 255), p.random(150, 255), 220);
+        size = p.random(DEFAULT_MEMORY_FOOTPRINT, DEFAULT_MEMORY_FOOTPRINT * 4);
     }
 
     public Program(float x, float y, float vX, float vY, float xoff, float size, int color) {

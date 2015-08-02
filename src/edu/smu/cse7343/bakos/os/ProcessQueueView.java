@@ -45,14 +45,13 @@ public class ProcessQueueView {
         p.textSize(18);
         p.text("Head", -50, 5);
         p.line(0, 0, 500, 0);
-        // float sizeOffset = 0.0f;
-        // for (ProcessControlBlock pcb : queue.queue) {
-        //     ProcessView view = processViews.get(new Integer(pcb.pid));
-        //     view.draw();
-        //     p.fill(view.color);
-        //     p.ellipse(sizeOffset + (view.size / 2.0f), 0, view.size, view.size);
-        //     sizeOffset += (view.size / 2.0f);
-        // }
+        float sizeOffset = 0.0f;
+        for (ProcessControlBlock pcb : queue.queue) {
+            p.println("PCB reg 0: " + pcb.registers[0]);
+            p.fill(Float.floatToRawIntBits(pcb.registers[0]));
+            p.ellipse(sizeOffset + (pcb.size() / 2.0f), 0, pcb.size(), pcb.size());
+            sizeOffset += (pcb.size() / 2.0f);
+        }
         p.popMatrix();
         p.popStyle();
         // for (ProcessControlBlock pcb : queue.queue) {

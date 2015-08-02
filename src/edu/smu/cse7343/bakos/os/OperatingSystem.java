@@ -41,7 +41,7 @@ public class OperatingSystem {
         if (!readyQueue.isEmpty() && (cpu.isIdle || roundRobinCycleLimitReached())) {
             switchContext();
         } // else idle
-        System.out.println("Ready queue has: " + readyQueue.queue.size());
+        System.out.println("Ready queue has: " + readyQueue.queue.size()); // TODO: delete
     }
 
     // Execute a new process, by adding a PCB for the new process to the tail
@@ -49,7 +49,7 @@ public class OperatingSystem {
     public void exec() {
         Program p = new Program(); // load program from disk
         // allocate memory
-        int memoryNeeded = determineMemoryAllocSize(p);
+        int memoryNeeded = (int)p.size;
         int base = nextAvailableMemoryAddress;
         nextAvailableMemoryAddress += memoryNeeded;
         // store in memory
@@ -60,25 +60,19 @@ public class OperatingSystem {
     }
 
     private void storeInMemory(int baseAddress, int memoryNeeded, Program p) {
-        for(int i = baseAddress; i < baseAddress + 20; ++i) {
+        for (int i = baseAddress; i < baseAddress + 20; ++i) {
             memory.write(i, Float.intBitsToFloat(p.color));
         }
-        memory.write(baseAddress + 21, p.location.x);
-        memory.write(baseAddress + 22, p.location.y);
-        memory.write(baseAddress + 23, p.velocity.x);
-        memory.write(baseAddress + 24, p.velocity.y);
-        memory.write(baseAddress + 25, p.xoff);
-        memory.write(baseAddress + 26, p.size);
-        for(int i = baseAddress + memoryNeeded; i > baseAddress + memoryNeeded -10; --i) {
+        memory.write(baseAddress + 20, p.location.x);
+        memory.write(baseAddress + 21, p.location.y);
+        memory.write(baseAddress + 22, p.velocity.x);
+        memory.write(baseAddress + 23, p.velocity.y);
+        memory.write(baseAddress + 24, p.xoff);
+        memory.write(baseAddress + 25, p.size);
+        for (int i = baseAddress + memoryNeeded - 1; i > baseAddress + memoryNeeded -10; --i) {
             memory.write(i, Float.intBitsToFloat(p.color));    
         }
         memory.write(nextAvailableMemoryAddress, Float.intBitsToFloat(p.p.color(255, 0, 0)));
-    }
-
-    // Simulates different program sizes and initial stack/heap space, randomly returning
-    // between 32 and 64.
-    private int determineMemoryAllocSize(Program p) {
-        return rand.nextInt(32) + 36;
     }
 
     // Place the currently executing process' PCB at the tail of the ready queue,
@@ -139,7 +133,7 @@ public class OperatingSystem {
     // In this simulation, process id 0 is the kernel idle process; all other
     // processes are userspace processes.
     private boolean cpuIsExecutingAUserspaceProcess() {
-        return currentPid > 0;
+        return !cpu.isIdle;
     }
 
 }
