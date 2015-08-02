@@ -42,7 +42,7 @@ public class CPUView {
         // Registers
         p.rectMode(p.CORNER);
         for (int i = 0; i < cpu.registers.length; ++i) {
-            p.fill(cpu.registers[i]);
+            p.fill(Float.floatToRawIntBits(cpu.registers[i]));
             p.rect(-WIDTH / 2 + 70 + (i * 10), -HEIGHT / 2 + 50, 10, 15);
         }
         // Labels
@@ -57,8 +57,20 @@ public class CPUView {
         p.text("PC: " + cpu.programCounter, -WIDTH / 2 + 10, -HEIGHT / 2 + 40);
         if (cpu.isIdle) p.text("(kernel idle process)", -WIDTH / 2 + 50, -HEIGHT / 2 + 40);
         p.text("Registers", -WIDTH / 2 + 10, -HEIGHT / 2 + 60);
+        p.text("Base: " + cpu.baseRegister, -WIDTH / 2 + 10, HEIGHT / 2 - 30);
+        p.text("Limit: " + cpu.limitRegister, -WIDTH / 2 + 10, HEIGHT / 2 - 10);
         p.popMatrix();
         p.popStyle();
+        // current program
+        if (cpu.currentProgram != null) {
+            p.pushStyle();
+            p.pushMatrix();
+            p.translate(cpu.currentProgram.location.x, cpu.currentProgram.location.y);
+            p.fill(cpu.currentProgram.color);
+            p.ellipse(0, 0, cpu.currentProgram.size, cpu.currentProgram.size);
+            p.popStyle();
+            p.popMatrix();
+        }
     }
 
 }

@@ -30,8 +30,6 @@ public class Simulator extends PApplet {
     private OperatingSystem os;
     private OperatingSystemView osView;
 
-    private Program deleteMe;
-
     public void setup() {
         size(displayWidth, displayHeight);
         cpu = new CPU();
@@ -41,8 +39,6 @@ public class Simulator extends PApplet {
         memoryView = new MemoryView(memory, 100, height - 800, this);
         cpuView = new CPUView(cpu, 200, height - 500, this);
         osView = new OperatingSystemView(os, 100, height, this);
-
-        deleteMe = new Program();
     }
 
     // Invoked automatically and over and over again by Processing. This provides an implicit
@@ -56,15 +52,6 @@ public class Simulator extends PApplet {
         cpuView.draw();
         memoryView.draw();
         osView.draw();
-
-        deleteMe();
-    }
-
-    private void deleteMe() {
-        deleteMe.step();
-        translate(deleteMe.location.x, deleteMe.location.y);
-        fill(deleteMe.color);
-        ellipse(0, 0, deleteMe.size, deleteMe.size);
     }
 
     // This really is a true interrupt handler, and I use it to simulate interrupts. Pressing

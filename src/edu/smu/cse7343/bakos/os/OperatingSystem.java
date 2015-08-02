@@ -47,30 +47,20 @@ public class OperatingSystem {
     // Execute a new process, by adding a PCB for the new process to the tail
     // of the ready queue.
     public void exec() {
-        Program p = new Program(); // load program from disk
+        Program program = new Program(); // load program from disk
         // allocate memory
-        int memoryNeeded = (int)p.size;
+        int memoryNeeded = (int)program.size;
         int base = nextAvailableMemoryAddress;
         nextAvailableMemoryAddress += memoryNeeded;
         // store in memory
-        storeInMemory(base, memoryNeeded, p);
-        ProcessControlBlock pcb = new ProcessControlBlock(nextAvailablePid++);
-        // TODO add base and limit, etc to pcb
+        storeInMemory(base, memoryNeeded, program);
+        ProcessControlBlock pcb = new ProcessControlBlock(nextAvailablePid++, base, base + memoryNeeded - 1, program);
         readyQueue.add(pcb);
     }
 
     private void storeInMemory(int baseAddress, int memoryNeeded, Program p) {
-        for (int i = baseAddress; i < baseAddress + 20; ++i) {
+        for (int i = baseAddress; i < baseAddress + memoryNeeded; ++i) {
             memory.write(i, Float.intBitsToFloat(p.color));
-        }
-        memory.write(baseAddress + 20, p.location.x);
-        memory.write(baseAddress + 21, p.location.y);
-        memory.write(baseAddress + 22, p.velocity.x);
-        memory.write(baseAddress + 23, p.velocity.y);
-        memory.write(baseAddress + 24, p.xoff);
-        memory.write(baseAddress + 25, p.size);
-        for (int i = baseAddress + memoryNeeded - 1; i > baseAddress + memoryNeeded -10; --i) {
-            memory.write(i, Float.intBitsToFloat(p.color));    
         }
         memory.write(nextAvailableMemoryAddress, Float.intBitsToFloat(p.p.color(255, 0, 0)));
     }
@@ -82,21 +72,19 @@ public class OperatingSystem {
         System.out.println("Dispatch!");
         if (readyQueue.isEmpty()) return;
         if (cpuIsExecutingAUserspaceProcess()) {
-            ProcessControlBlock pcb = new ProcessControlBlock(currentPid);
-            pcb.state = ProcessState.READY;
-            pcb.programCounter = cpu.programCounter;
-            pcb.registers = cpu.registers.clone();
-            readyQueue.add(pcb);
+            // ProcessControlBlock pcb = new ProcessControlBlock(currentPid, ??, 0);
+            // pcb.state = ProcessState.READY;
+            // pcb.programCounter = cpu.programCounter;
+            // pcb.registers = cpu.registers.clone();
+            // readyQueue.add(pcb);
         }
         dispatch(readyQueue.remove());
     }
 
     private void dispatch(ProcessControlBlock pcb) {
-        pcb.state = ProcessState.RUNNING;
-        cpu.registers = pcb.registers.clone();
-        cpu.programCounter = pcb.programCounter;
         currentPid = pcb.pid;
-        if (cpu.isIdle) cpu.isIdle = false;
+        pcb.state = ProcessState.RUNNING;
+        cpu.exec(pcb);
     }
 
     // Simulates the self-blocking of a process, as if it is waiting for a resource.
