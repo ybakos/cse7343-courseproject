@@ -62,8 +62,7 @@ public class Simulator extends PApplet {
         if (key == ' ') {
             os.exec();
         } else if (key == 'b') {
-            //os.blockCurrentProcess();
-            //osView.blockProcess(pcb);
+            os.blockCurrentProcess();
         }
     }
 

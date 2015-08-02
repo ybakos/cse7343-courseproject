@@ -27,7 +27,7 @@ public class ProcessQueue {
     }
 
     public void add(ProcessControlBlock pcb) {
-        pcb.state = ProcessState.READY;
+        pcb.state = managedState;
         queue.add(pcb);
     }
 

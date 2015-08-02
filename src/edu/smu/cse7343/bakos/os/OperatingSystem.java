@@ -90,15 +90,19 @@ public class OperatingSystem {
     // Simulates the self-blocking of a process, as if it is waiting for a resource.
     // Once the process is blocked, it is placed on the waiting queue, a context switch
     // occurs, and the corresponding view is dimmed to indicate that the process is blocked.
-    // public void blockCurrentProcess() {
-    //     if (currentProcess == null) return;
-    //     currentProcess.state = ProcessState.WAITING;
-    //     waitQueue.add(currentProcess);
-    //     // TODO: extract ProcessView view = processViews.get(new Integer(currentProcess.pid));
-    //     // if (view != null) view.dim();
-    //     currentProcess = null;
-    //     switchContext();
-    // }
+    public void blockCurrentProcess() {
+        if (!cpuIsExecutingAUserspaceProcess()) return;
+        ProcessControlBlock pcb = new ProcessControlBlock(currentPid, cpu.baseRegister, cpu.limitRegister, cpu.currentProgram);
+        pcb.state = ProcessState.WAITING;
+        pcb.programCounter = cpu.programCounter;
+        waitQueue.add(pcb);
+        if (readyQueue.isEmpty()) {
+            cpu.currentProgram = null;
+            cpu.isIdle = true;
+        } else {
+            dispatch(readyQueue.remove());
+        }
+    }
 
     // Simulates the availability of a resource and an interrupt that allows the process
     // corresponding with the PCB at the head of the queue to be placed back in the ready
