@@ -46,7 +46,6 @@ public class ProcessControlBlock {
 
     // Base address - limit. A convenience method.
     public int size() {
-//        return 50;
         return memoryLimitAddress - memoryBaseAddress;
     }
 

@@ -55,6 +55,10 @@ public class ProcessQueueView {
                 p.fill(Float.floatToRawIntBits(pcb.registers[0]));
             }
             p.ellipse(sizeOffset + (pcb.size() / 2.0f), 0, pcb.size(), pcb.size());
+            p.textMode(p.CENTER);
+            p.textSize(18);
+            p.fill(255);
+            p.text(pcb.pid, sizeOffset + (pcb.size() / 2.0f), 0);
             sizeOffset += pcb.size();
         }
         p.popMatrix();
