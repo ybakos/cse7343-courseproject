@@ -44,7 +44,7 @@ public class ProcessQueueView {
         p.text(title, 250, -50);
         p.textSize(18);
         p.text("Head", -50, 5);
-        p.line(0, 0, 500, 0);
+        p.line(0, 0, (int)(p.width * 0.8), 0);
         float sizeOffset = 0.0f;
         for (ProcessControlBlock pcb : queue.queue) {
             p.println("State: " + pcb.state);

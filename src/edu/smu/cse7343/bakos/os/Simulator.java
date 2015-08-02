@@ -77,11 +77,13 @@ public class Simulator extends PApplet {
         fill(50);
         textSize(72);
         textAlign(CENTER);
-        text("Press space to create a process.", width / 2, 100);
-        text("Press B to cause the executing process to self-block.", width / 2, 180);
+        text("Press space to create a process.", width / 2, 80);
+        textSize(48);
+        text("Press B to cause the executing process to self-block.", width / 2, 160);
+        text("Press K to kill (terminate) the executing process.", width / 2, 220);
         textSize(32);
         textAlign(CENTER);
-        text("Click on a blocked process to interrupt and place it back in the ready queue.", width / 2, 230);
+        text("Click on a blocked process to interrupt and place it back in the ready queue.", width / 2, 280);
     }
 
 }
