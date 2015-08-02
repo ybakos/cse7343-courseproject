@@ -64,6 +64,12 @@ public class OperatingSystem {
         memory.write(nextAvailableMemoryAddress, Float.intBitsToFloat(p.p.color(255, 0, 0)));
     }
 
+    private void free(int start, int end) {
+        for (int i = start; i <= end; ++i) {
+            memory.write(i, 0);
+        }
+    }
+
     // Place the currently executing process' PCB at the tail of the ready queue,
     // and restore the execution of the process represented by the PCB at the head
     // of the queue.
@@ -110,6 +116,17 @@ public class OperatingSystem {
         if (waitQueue.remove(pcb)) {
             pcb.state = ProcessState.READY;
             readyQueue.add(pcb);
+        }
+    }
+
+    public void killCurrentProcess() {
+        if (cpu.isIdle) return;
+        free(cpu.baseRegister, cpu.limitRegister);
+        if (readyQueue.isEmpty()) {
+            cpu.isIdle = true;
+            cpu.currentProgram = null;
+        } else {
+            dispatch(readyQueue.remove());
         }
     }
 

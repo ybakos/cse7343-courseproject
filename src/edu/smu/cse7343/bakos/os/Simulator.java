@@ -63,6 +63,8 @@ public class Simulator extends PApplet {
             os.exec();
         } else if (key == 'b') {
             os.blockCurrentProcess();
+        } else if (key == 'k') {
+            os.killCurrentProcess();
         }
     }
 
