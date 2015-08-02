@@ -70,7 +70,12 @@ public class Simulator extends PApplet {
     // signals a process in the wait queue that its resource is ready and that the process
     // can be put back on the ready queue.
     public void mousePressed() {
-        
+        for (ProcessControlBlock pcb : os.waitQueue.queue) {
+            if (pcb.state == ProcessState.WAITING && dist(mouseX, mouseY, pcb.registers[5], pcb.registers[6]) < (pcb.registers[1] / 2) ) {
+                os.interruptAndUnblock(pcb);
+                break;
+            }
+        }
     }
 
     private void drawTitle() {

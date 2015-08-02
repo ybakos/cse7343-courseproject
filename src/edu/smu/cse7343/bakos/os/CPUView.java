@@ -42,7 +42,11 @@ public class CPUView {
         // Registers
         p.rectMode(p.CORNER);
         for (int i = 0; i < cpu.registers.length; ++i) {
-            p.fill(Float.floatToRawIntBits(cpu.registers[i]));
+            if (cpu.isIdle) {
+                p.fill(0);
+            } else {
+                p.fill(Float.floatToRawIntBits(cpu.registers[i]));
+            }
             p.rect(-WIDTH / 2 + 100 + (i * 10), -HEIGHT / 2 + 50, 10, 15);
         }
         // Labels

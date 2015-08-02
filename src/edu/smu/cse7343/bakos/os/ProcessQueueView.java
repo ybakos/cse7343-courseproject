@@ -47,10 +47,9 @@ public class ProcessQueueView {
         p.line(0, 0, (int)(p.width * 0.8), 0);
         float sizeOffset = 0.0f;
         for (ProcessControlBlock pcb : queue.queue) {
-            p.println("State: " + pcb.state);
             if (pcb.state == ProcessState.WAITING) {
                 int currentColor = Float.floatToRawIntBits(pcb.registers[0]);
-                int dimColor = p.color(255, p.green(currentColor), p.blue(currentColor), p.alpha(currentColor) - 100);
+                int dimColor = p.color(p.red(currentColor), p.green(currentColor), p.blue(currentColor), p.alpha(currentColor) - 100);
                 p.fill(dimColor);
             } else {
                 p.fill(Float.floatToRawIntBits(pcb.registers[0]));

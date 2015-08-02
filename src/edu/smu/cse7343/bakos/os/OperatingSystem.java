@@ -41,7 +41,6 @@ public class OperatingSystem {
         if (!readyQueue.isEmpty() && (cpu.isIdle || roundRobinCycleLimitReached())) {
             switchContext();
         } // else idle
-        System.out.println("Ready queue has: " + readyQueue.queue.size()); // TODO: delete
     }
 
     // Execute a new process, by adding a PCB for the new process to the tail
@@ -107,15 +106,12 @@ public class OperatingSystem {
     // Simulates the availability of a resource and an interrupt that allows the process
     // corresponding with the PCB at the head of the queue to be placed back in the ready
     // queue.
-    // private void interruptAndUnblock(int pid) {
-    //     ProcessControlBlock waitHead = os.waitQueue.peek();
-    //     if (waitHead != null && pid == waitHead.pid) {
-    //         ProcessControlBlock pcb = os.waitQueue.remove();
-    //         pcb.state = ProcessState.READY;
-    //         os.readyQueue.add(waitHead);
-    //         processViews.get(new Integer(pid)).light();
-    //     }
-    // }
+    public void interruptAndUnblock(ProcessControlBlock pcb) {
+        if (waitQueue.remove(pcb)) {
+            pcb.state = ProcessState.READY;
+            readyQueue.add(pcb);
+        }
+    }
 
     // A naive simulation of determining if a process has received enough CPU time.
     private boolean roundRobinCycleLimitReached() {

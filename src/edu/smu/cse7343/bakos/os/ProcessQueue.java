@@ -35,6 +35,10 @@ public class ProcessQueue {
         return queue.remove();
     }
 
+    public boolean remove(ProcessControlBlock pcb) {
+        return queue.remove(pcb);
+    }
+
     public ProcessControlBlock peek() {
         return queue.peek();
     }
