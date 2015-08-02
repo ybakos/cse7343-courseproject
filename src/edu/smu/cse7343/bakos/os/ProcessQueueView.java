@@ -50,7 +50,7 @@ public class ProcessQueueView {
             p.println("PCB reg 0: " + pcb.registers[0]);
             p.fill(Float.floatToRawIntBits(pcb.registers[0]));
             p.ellipse(sizeOffset + (pcb.size() / 2.0f), 0, pcb.size(), pcb.size());
-            sizeOffset += (pcb.size() / 2.0f);
+            sizeOffset += pcb.size();
         }
         p.popMatrix();
         p.popStyle();

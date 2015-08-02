@@ -49,9 +49,9 @@ public class Simulator extends PApplet {
         os.manageProcesses(); // simulates execution of kernel processes
         background(0);
         drawTitle();
-        cpuView.draw();
         memoryView.draw();
         osView.draw();
+        cpuView.draw();
     }
 
     // This really is a true interrupt handler, and I use it to simulate interrupts. Pressing
