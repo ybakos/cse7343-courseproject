@@ -18,7 +18,6 @@ public class OperatingSystem {
 
     private CPU cpu;
     private Memory memory;
-    private int nextAvailableMemoryAddress;
     private int currentPid;
     private int nextAvailablePid;
     public ProcessQueue readyQueue;
@@ -32,7 +31,6 @@ public class OperatingSystem {
     public OperatingSystem(CPU cpu, Memory memory) {
         this.cpu = cpu;
         this.memory = memory;
-        nextAvailableMemoryAddress = 0; // Logical. -> 256000
         currentPid = 0; // idle
         nextAvailablePid = FAUX_INITIAL_USERSPACE_PID;
         readyQueue = new ProcessQueue(ProcessState.READY);
@@ -66,13 +64,23 @@ public class OperatingSystem {
         for (int i = baseAddress; i < baseAddress + memoryNeeded; ++i) {
             memory.write(i, Float.intBitsToFloat(p.color));
         }
-        memory.write(nextAvailableMemoryAddress, Float.intBitsToFloat(p.p.color(255, 0, 0)));
+        memory.write(baseAddress + memoryNeeded, Float.intBitsToFloat(p.p.color(255, 0, 0)));
     }
 
     private int alloc(int memoryNeeded) {
-        int address = nextAvailableMemoryAddress;
-        nextAvailableMemoryAddress += memoryNeeded;
-        return address;
+        // first fit
+        for (Integer key : freeMap.keySet()) {
+            int baseAddress = key.intValue();
+            int size = freeMap.get(key).intValue();
+            if (size > memoryNeeded) {
+                freeMap.remove(key);
+                int newFreeBaseAddress = baseAddress + memoryNeeded;
+                int newFreeSize = baseAddress + size - newFreeBaseAddress;
+                freeMap.put(new Integer(newFreeBaseAddress), new Integer(newFreeSize));
+                return baseAddress;
+            }
+        }
+        return 0; // TODO: Swap!
     }
 
     private void free(int start, int end) {
