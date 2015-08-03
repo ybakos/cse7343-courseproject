@@ -66,22 +66,46 @@ public class OperatingSystem {
         }
     }
 
+    // TODO: Replace with Strategy pattern.
     private int alloc(int memoryNeeded) {
         // first fit
         System.out.println("ALLOC " + memoryNeeded);
-        for (Integer key : freeMap.keySet()) {
-            int baseAddress = key.intValue();
-            int size = freeMap.get(key).intValue();
-            System.out.println("Checking: " + baseAddress + "->" + size);
-            if (size > memoryNeeded) {
-                freeMap.remove(key);
+        if (allocationAlgorithm == MemoryAllocationAlgorithm.FIRST_FIT) {
+            for (Integer key : freeMap.keySet()) {
+                int baseAddress = key.intValue();
+                int size = freeMap.get(key).intValue();
+                System.out.println("Checking: " + baseAddress + "->" + size);
+                if (size > memoryNeeded) {
+                    freeMap.remove(key);
+                    int newFreeBaseAddress = baseAddress + memoryNeeded;
+                    int newFreeSize = baseAddress + size - newFreeBaseAddress;
+                    System.out.println("Found space at: " + baseAddress);
+                    System.out.println("Remaining: " + newFreeBaseAddress + "->" + newFreeSize);
+                    freeMap.put(new Integer(newFreeBaseAddress), new Integer(newFreeSize));
+                    return baseAddress;
+                }
+            }
+        } else if (allocationAlgorithm == MemoryAllocationAlgorithm.BEST_FIT) {
+            System.out.println("BEST FIT");
+            System.out.println("Segment size - >Address");
+            TreeMap<Integer, Integer> segmentSizes = new TreeMap<Integer, Integer>(); // size -> address
+            for (Integer key : freeMap.keySet()) {
+                segmentSizes.put(freeMap.get(key), key);
+                System.out.println(freeMap.get(key) + " -> " + key);
+            }
+            Integer bestFittingSegmentSize = segmentSizes.ceilingKey(new Integer(memoryNeeded));
+            if (bestFittingSegmentSize != null) {
+                int baseAddress = segmentSizes.get(bestFittingSegmentSize).intValue();
                 int newFreeBaseAddress = baseAddress + memoryNeeded;
-                int newFreeSize = baseAddress + size - newFreeBaseAddress;
+                int newFreeSize = baseAddress + bestFittingSegmentSize.intValue() - newFreeBaseAddress;
                 System.out.println("Found space at: " + baseAddress);
                 System.out.println("Remaining: " + newFreeBaseAddress + "->" + newFreeSize);
+                freeMap.remove(new Integer(baseAddress));
                 freeMap.put(new Integer(newFreeBaseAddress), new Integer(newFreeSize));
                 return baseAddress;
             }
+        } else if (allocationAlgorithm == MemoryAllocationAlgorithm.WORST_FIT) {
+
         }
         return 0; // TODO: Swap!
     }
@@ -89,18 +113,20 @@ public class OperatingSystem {
     private void free(int start, int end) {
         System.out.println("FREEDOOOOMMMMM!!!");
         freeMap.put(new Integer(start), new Integer(end - start + 1));
-        // merge contiguous blocks
-        ArrayList<Integer> mergedSegments = new ArrayList<Integer>();
+        // Merge contiguous blocks, from back to front.
+        ArrayList<Integer> mergedSegmentsToDelete = new ArrayList<Integer>();
         for (Integer key : freeMap.descendingKeySet()) {
             Integer nextFreeSegmentBaseAddress = freeMap.lowerKey(key);
             // System.out.println("Inspecting: " + key + " | floorKey: " + nextFreeSegmentBaseAddress);
             if (nextFreeSegmentBaseAddress != null && nextFreeSegmentBaseAddress.intValue() + freeMap.get(nextFreeSegmentBaseAddress).intValue() == key.intValue()) {
                 freeMap.put(nextFreeSegmentBaseAddress, new Integer(freeMap.get(key).intValue() + freeMap.get(nextFreeSegmentBaseAddress).intValue()));
-                mergedSegments.add(key);
+                mergedSegmentsToDelete.add(key);
             }
         }
-        for (Integer deletableMergedSegmentAddress : mergedSegments)
+        // Delete the upper part of all merged segments.
+        for (Integer deletableMergedSegmentAddress : mergedSegmentsToDelete)
             freeMap.remove(deletableMergedSegmentAddress);
+        // Show the freelist, for sanity checking (and demo).
         System.out.println("Freelist:");
         for (Integer key : freeMap.keySet()) {
             System.out.println(key.intValue() + "->\t" + freeMap.get(key).intValue());
