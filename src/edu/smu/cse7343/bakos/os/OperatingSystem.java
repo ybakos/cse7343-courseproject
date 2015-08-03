@@ -24,6 +24,9 @@ public class OperatingSystem {
     public ProcessQueue readyQueue;
     public ProcessQueue waitQueue;
 
+    private TreeMap<Integer, Integer> freeMap;
+    public MemoryAllocationAlgorithm allocationAlgorithm;
+
     private Random rand;
 
     public OperatingSystem(CPU cpu, Memory memory) {
@@ -34,6 +37,9 @@ public class OperatingSystem {
         nextAvailablePid = FAUX_INITIAL_USERSPACE_PID;
         readyQueue = new ProcessQueue(ProcessState.READY);
         waitQueue = new ProcessQueue(ProcessState.WAITING);
+        freeMap = new TreeMap<Integer, Integer>();
+        freeMap.put(new Integer(0), new Integer(memory.totalSize()));
+        allocationAlgorithm = MemoryAllocationAlgorithm.FIRST_FIT;
         rand = new Random();
     }
 
@@ -49,8 +55,7 @@ public class OperatingSystem {
         Program program = new Program(); // load program from disk
         // allocate memory
         int memoryNeeded = (int)program.size;
-        int base = nextAvailableMemoryAddress;
-        nextAvailableMemoryAddress += memoryNeeded;
+        int base = alloc(memoryNeeded);
         // store in memory
         storeInMemory(base, memoryNeeded, program);
         ProcessControlBlock pcb = new ProcessControlBlock(nextAvailablePid++, base, base + memoryNeeded - 1, program);
@@ -64,6 +69,12 @@ public class OperatingSystem {
         memory.write(nextAvailableMemoryAddress, Float.intBitsToFloat(p.p.color(255, 0, 0)));
     }
 
+    private int alloc(int memoryNeeded) {
+        int address = nextAvailableMemoryAddress;
+        nextAvailableMemoryAddress += memoryNeeded;
+        return address;
+    }
+
     private void free(int start, int end) {
         for (int i = start; i <= end; ++i) {
             memory.write(i, 0);
@@ -74,7 +85,6 @@ public class OperatingSystem {
     // and restore the execution of the process represented by the PCB at the head
     // of the queue.
     private void switchContext() {
-        System.out.println("Dispatch!");
         if (readyQueue.isEmpty()) return;
         if (cpuIsExecutingAUserspaceProcess()) {
             ProcessControlBlock pcb = new ProcessControlBlock(currentPid, cpu.baseRegister, cpu.limitRegister, cpu.currentProgram);

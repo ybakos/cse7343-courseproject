@@ -41,6 +41,7 @@ public class ProcessQueueView {
         p.translate(x, y);
         p.stroke(150);
         p.textSize(32);
+        p.fill(50);
         p.text(title, 250, -50);
         p.textSize(18);
         p.text("Head", -50, 5);
@@ -55,7 +56,7 @@ public class ProcessQueueView {
                 p.fill(Float.floatToRawIntBits(pcb.registers[0]));
             }
             p.ellipse(sizeOffset + (pcb.size() / 2.0f), 0, pcb.size(), pcb.size());
-            p.textMode(p.CENTER);
+            p.textAlign(p.CENTER);
             p.textSize(18);
             p.fill(255);
             p.text(pcb.pid, sizeOffset + (pcb.size() / 2.0f), 0);

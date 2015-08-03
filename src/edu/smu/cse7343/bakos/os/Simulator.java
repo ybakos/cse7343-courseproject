@@ -30,6 +30,7 @@ public class Simulator extends PApplet {
     private OperatingSystem os;
     private OperatingSystemView osView;
 
+
     public void setup() {
         size(displayWidth, displayHeight);
         cpu = new CPU();
@@ -49,6 +50,7 @@ public class Simulator extends PApplet {
         os.manageProcesses(); // simulates execution of kernel processes
         background(0);
         drawTitle();
+        drawAllocationSelectionMenu();
         memoryView.draw();
         osView.draw();
         cpuView.draw();
@@ -65,6 +67,13 @@ public class Simulator extends PApplet {
             os.blockCurrentProcess();
         } else if (key == 'k') {
             os.killCurrentProcess();
+        }
+        if (key == '1') {
+            os.allocationAlgorithm = MemoryAllocationAlgorithm.FIRST_FIT;
+        } else if (key == '2') {
+            os.allocationAlgorithm = MemoryAllocationAlgorithm.BEST_FIT;
+        } else if (key == '3') {
+            os.allocationAlgorithm = MemoryAllocationAlgorithm.WORST_FIT;
         }
     }
 
@@ -91,6 +100,22 @@ public class Simulator extends PApplet {
         textSize(32);
         textAlign(CENTER);
         text("Click on a blocked process to interrupt and place it back in the ready queue.", width / 2, 280);
+    }
+
+    private void drawAllocationSelectionMenu() {
+        textAlign(CENTER);
+        textSize(24);
+        fill(50);
+        text("Memory Allocation Algorithm:", width / 2, height / 2);
+        if (os.allocationAlgorithm == MemoryAllocationAlgorithm.FIRST_FIT) fill(200, 255, 200);
+        else fill(150);
+        text("1. First Fit", width / 2, height / 2 + 40);
+        if (os.allocationAlgorithm == MemoryAllocationAlgorithm.BEST_FIT) fill(200, 255, 200);
+        else fill(150);
+        text("2. Best Fit", width / 2, height / 2 + 80);
+        if (os.allocationAlgorithm == MemoryAllocationAlgorithm.WORST_FIT) fill(200, 255, 200);
+        else fill(150);
+        text("3. Worst Fit", width / 2, height / 2 + 120);
     }
 
 }
