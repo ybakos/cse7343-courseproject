@@ -105,7 +105,24 @@ public class OperatingSystem {
                 return baseAddress;
             }
         } else if (allocationAlgorithm == MemoryAllocationAlgorithm.WORST_FIT) {
-
+            System.out.println("WORST FIT");
+            System.out.println("Segment size - >Address");
+            TreeMap<Integer, Integer> segmentSizes = new TreeMap<Integer, Integer>(); // size -> address
+            for (Integer key : freeMap.keySet()) {
+                segmentSizes.put(freeMap.get(key), key);
+                System.out.println(freeMap.get(key) + " -> " + key);
+            }
+            Integer worstFittingSegmentSize = segmentSizes.lastKey();
+            if (worstFittingSegmentSize.intValue() >= memoryNeeded) {
+                int baseAddress = segmentSizes.get(worstFittingSegmentSize).intValue();
+                int newFreeBaseAddress = baseAddress + memoryNeeded;
+                int newFreeSize = baseAddress + worstFittingSegmentSize.intValue() - newFreeBaseAddress;
+                System.out.println("Found space at: " + baseAddress);
+                System.out.println("Remaining: " + newFreeBaseAddress + "->" + newFreeSize);
+                freeMap.remove(new Integer(baseAddress));
+                freeMap.put(new Integer(newFreeBaseAddress), new Integer(newFreeSize));
+                return baseAddress;
+            }
         }
         return 0; // TODO: Swap!
     }
