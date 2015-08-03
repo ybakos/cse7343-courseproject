@@ -6,7 +6,6 @@
     register data.
 
     Upon instantiation, a CPU will be assumed to execute the kernel idle process.
-
 */
 
 package edu.smu.cse7343.bakos.os;
@@ -28,6 +27,7 @@ public class CPU {
     public CPU() {
     }
 
+    // Execute the next step of the current process
     public void tickTock() {
         ++cycleCount;
         if (isIdle) {
@@ -45,6 +45,7 @@ public class CPU {
         }
     }
 
+    // Restore CPU state from a PCB in preparation for next clock cycle.
     public void exec(ProcessControlBlock pcb) {
         isIdle = false;
         programCounter = pcb.programCounter;

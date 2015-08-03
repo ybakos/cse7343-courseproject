@@ -2,7 +2,13 @@
     Program.java
     @author Yong Joseph Bakos
 
-    TODO
+    This class represents a program stored on disk, that can be "loaded" into memory and
+    then executed by a CPU. When the CPU "runs" a program instance, it appears on the screen
+    as a moving circle.
+
+    The instance members of Program objects correspond to CPU register data, and register data
+    within PCBs. The color member corresponds with the color of the circle, the color of data
+    in the CPU registers, and the color of its allocated memory.
 */
 
 package edu.smu.cse7343.bakos.os;

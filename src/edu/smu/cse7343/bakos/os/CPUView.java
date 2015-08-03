@@ -3,7 +3,6 @@
     @author Yong Joseph Bakos
 
     This class encapsulates a visual representation of a CPU object.
-
 */
 
 package edu.smu.cse7343.bakos.os;

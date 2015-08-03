@@ -2,7 +2,11 @@
     OperatingSystem.java
     @author Yong Joseph Bakos
 
-    TODO
+    This class represents a simple, simulated operating system that provides "system calls"
+    for executing new processes, blocking, unblocking, interrupting, and allocating memory.
+
+    It leverages a brute-force first-fit, best-fit, and worst-fit allocation algorithm for
+    memory. Two queues, ready and wait, are maintained for managing PCBs.
 */
 
 package edu.smu.cse7343.bakos.os;
@@ -41,6 +45,8 @@ public class OperatingSystem {
         rand = new Random();
     }
 
+    // Simulates the cycles of a scheduler thread. Switches context when the round-robin cycle
+    // period ends and there are other PCBs in the ready queue.
     public void manageProcesses() {
         if (!readyQueue.isEmpty() && (cpu.isIdle || roundRobinCycleLimitReached())) {
             switchContext();
@@ -60,12 +66,15 @@ public class OperatingSystem {
         readyQueue.add(pcb);
     }
 
+    // Simulates the loading of a program into allocated memory.
     private void storeInMemory(int baseAddress, int memoryNeeded, Program p) {
         for (int i = baseAddress; i < baseAddress + memoryNeeded; ++i) {
             memory.write(i, Float.intBitsToFloat(p.color));
         }
     }
 
+    // A simulated `malloc` system call. Uses either a FIRST_FIT, BEST_FIT, or WORST_FIT
+    // algorithm.
     // TODO: Replace with Strategy pattern.
     private int alloc(int memoryNeeded) {
         // first fit
@@ -127,6 +136,8 @@ public class OperatingSystem {
         return 0; // TODO: Swap!
     }
 
+    // Simulation of a `free` system call. Adds unallocated process memory to the free list.
+    // Merges any adjacent free segments in the free list.
     private void free(int start, int end) {
         System.out.println("FREEDOOOOMMMMM!!!");
         freeMap.put(new Integer(start), new Integer(end - start + 1));
@@ -169,6 +180,7 @@ public class OperatingSystem {
         dispatch(readyQueue.remove());
     }
 
+    // Simulation of an OS dispatcher. Restores the state of the CPU from a PCB.
     private void dispatch(ProcessControlBlock pcb) {
         currentPid = pcb.pid;
         pcb.state = ProcessState.RUNNING;
@@ -202,6 +214,8 @@ public class OperatingSystem {
         }
     }
 
+    // Simulates a `kill` system call. Frees the memory for a process, terminates it, and
+    // interrupts the CPU to dispatch the next ready process.
     public void killCurrentProcess() {
         if (cpu.isIdle) return;
         free(cpu.baseRegister, cpu.limitRegister);

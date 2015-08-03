@@ -3,7 +3,8 @@
     @author Yong Joseph Bakos
 
     This class encapsulates a visual representation of a computer's memory.
-    TODO
+    Locations in memory for processes are indicated with color, that matches the
+    color of the process.
 */
 
 package edu.smu.cse7343.bakos.os;

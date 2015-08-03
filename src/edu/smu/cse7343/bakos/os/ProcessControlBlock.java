@@ -3,7 +3,9 @@
     @author Yong Joseph Bakos
 
     This class represents an operating system PCB.
-    TODO
+    Program state (color, location, velocity, etc) are stored in the registers, to simulate
+    runtime data registers from the CPU. Memory base and limit correspond to logical addresses
+    in the Memory class.
 */
 
 package edu.smu.cse7343.bakos.os;

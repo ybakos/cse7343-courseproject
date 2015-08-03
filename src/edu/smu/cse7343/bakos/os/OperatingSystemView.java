@@ -2,7 +2,7 @@
     OperatingSystemView.java
     @author Yong Joseph Bakos
 
-    TODO
+    This class is responsible for delegating the drawing of PCBs to each process queue view.
 */
 
 package edu.smu.cse7343.bakos.os;

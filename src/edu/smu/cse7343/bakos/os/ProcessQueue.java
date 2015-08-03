@@ -4,7 +4,6 @@
 
     This class represents a process queue, and is composed with an internal LinkedList,
     which Java implements as a doubly-linked list.
-
 */
 
 package edu.smu.cse7343.bakos.os;

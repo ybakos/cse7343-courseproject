@@ -2,7 +2,8 @@
     Memory.java
     @author Yong Joseph Bakos
 
-    TODO
+    This class represent a contiguous logical memory address space. Its size is determined
+    by the simulator upon instantiation.
 */
 
 package edu.smu.cse7343.bakos.os;

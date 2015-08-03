@@ -3,7 +3,6 @@
     @author Yong Joseph Bakos
 
     This class encapsulates the visual representation of a process queue.
-
 */
 
 package edu.smu.cse7343.bakos.os;
@@ -20,19 +19,12 @@ public class ProcessQueueView {
     private int y;
 
     // Visual representations of each running process, each corresponding to a PCB in a queue.
-//    HashMap<Integer, ProcessView> processViews;
-
     public ProcessQueueView(ProcessQueue queue, String title, int x, int y, PApplet p) {
         this.queue = queue;
         this.p = p;
         this.title = title;
         this.x = x;
         this.y = y;
-//        processViews = new HashMap<Integer, ProcessView>();
-    }
-
-    public void add(ProcessView view) {
-//        processViews.put(new Integer(view.pid), view);
     }
 
     public void draw() {
